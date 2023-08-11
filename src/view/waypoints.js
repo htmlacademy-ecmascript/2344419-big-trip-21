@@ -1,9 +1,9 @@
 //точки маршрута
 import { createElement } from '../render.js';
 
-function createEventListTemplate(){
-  return '<ul class="trip-events__list"></ul>';//список точек
-}
+//function createEventListTemplate(){
+//  return '<ul class="trip-events__list"></ul>';//список точек
+//}
 
 function createWayPointTemplite(){//точки по отдельности
   return `<li class="trip-events__item">
