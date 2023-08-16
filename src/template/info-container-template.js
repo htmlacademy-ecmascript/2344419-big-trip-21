@@ -1,5 +1,3 @@
-import { createElement } from '../render.js';
-
 function infoContainerTemplite(){
   return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
@@ -13,20 +11,4 @@ function infoContainerTemplite(){
   </p>
 </section>`;
 }
-
-export default class NewInfoView{
-  getTemplate(){
-    return infoContainerTemplite();
-  }
-
-  getElement(){
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement(){
-    this.element = null;
-  }
-}
+export {infoContainerTemplite};

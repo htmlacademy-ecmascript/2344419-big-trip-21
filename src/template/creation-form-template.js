@@ -1,6 +1,3 @@
-//форма создания и редакторования
-import { createElement } from '../render.js';
-
 function createFormTemplite(){
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -161,23 +158,6 @@ function createFormTemplite(){
       </div>
     </section>
   </section>
-</form>
-`;
+</form>`;
 }
-
-export default class NewCreateFormView{
-  getTemplate(){
-    return createFormTemplite();
-  }
-
-  getElement(){
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement(){
-    this.element = null;
-  }
-}
+export { createFormTemplite };

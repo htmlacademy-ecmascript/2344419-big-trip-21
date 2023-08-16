@@ -1,6 +1,3 @@
-//фильтры
-import { createElement } from '../render.js';
-
 function createWayPointTemplite(){
   return `<form class="trip-filters" action="#" method="get">
   <div class="trip-filters__filter">
@@ -26,20 +23,4 @@ function createWayPointTemplite(){
   <button class="visually-hidden" type="submit">Accept filter</button>
 </form>`;
 }
-
-export default class NewFilterView{
-  getTemplate(){
-    return createWayPointTemplite();
-  }
-
-  getElement(){
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement(){
-    this.element = null;
-  }
-}
+export { createWayPointTemplite };

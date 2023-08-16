@@ -1,25 +1,24 @@
-import NewWayFilterView from './view/filters.js';
-import NewSortingView from './view/sorting.js';
-import NewCreateFormView from './view/creation-form.js';
-import NewWayPointView from './view/waypoints.js';
-import NewInfoView from './view/info-container.js';
+import NewWayFilterView from './view/filters-view.js';
+import NewInfoView from './view/info-container-view.js';
+import BoardPresenter from './presenter/board-presenter.js';
+import PointModel from './model/points-model.js';
 
 import { RenderPosition, render } from './render.js';
 
-const POINT_COUNT = 3;
-const siteMainElement = document.querySelector('.page-main');
-const eventListElement = siteMainElement.querySelector('.trip-events');
-const siteMainelement = document.querySelector('.trip-main');
-const siteFilterElement = siteMainelement.querySelector('.trip-controls__filters');
+const body = document.querySelector('body');//боди
+const header = body.querySelector('.page-header');//хедер
+const siteMainelement = header.querySelector('.trip-main');//секция инфо
+const siteFilterElement = siteMainelement.querySelector('.trip-controls__filters');//секция фильтров
+const siteMainElement = document.querySelector('.page-main');//блок майн
+const eventListElement = siteMainElement.querySelector('.trip-events');//секция списка путешествий
+
+const pointModel = new PointModel;
+const boardPresenter = new BoardPresenter({
+  container:eventListElement,pointModel
+});
 
 render(new NewWayFilterView(), siteFilterElement);
-
 render(new NewInfoView(), siteMainelement, RenderPosition.AFTERBEGIN);
 
-render(new NewSortingView(), eventListElement);//сортировка
-render(new NewCreateFormView(), eventListElement);//форма редактирования
-for(let i = 0; i < POINT_COUNT; i++){
-  render(new NewWayPointView(), eventListElement);//точка маршрута
-}
-
+boardPresenter.init();
 
