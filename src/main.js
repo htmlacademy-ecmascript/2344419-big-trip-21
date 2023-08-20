@@ -2,23 +2,32 @@ import NewWayFilterView from './view/filters-view.js';
 import NewInfoView from './view/info-container-view.js';
 import BoardPresenter from './presenter/board-presenter.js';
 import PointModel from './model/points-model.js';
-
+import MockService from './mock/service-mock.js';
+import DestinationsModel from './model/destination-model.js';
+import OffersModel from './model/offers-model.js';
 import { RenderPosition, render } from './render.js';
 
 const body = document.querySelector('body');//боди
 const header = body.querySelector('.page-header');//хедер
-const siteMainelement = header.querySelector('.trip-main');//секция инфо
-const siteFilterElement = siteMainelement.querySelector('.trip-controls__filters');//секция фильтров
+const tripInfoElement = header.querySelector('.trip-main');//секция инфо
+const siteFilterElement = tripInfoElement.querySelector('.trip-controls__filters');//секция фильтров
 const siteMainElement = document.querySelector('.page-main');//блок майн
 const eventListElement = siteMainElement.querySelector('.trip-events');//секция списка путешествий
 
-const pointModel = new PointModel;
+const mockService = new MockService();
+const destinationsModel = new DestinationsModel(mockService);
+const offersModel = new OffersModel(mockService);
+const pointModel = new PointModel(mockService);
+
 const boardPresenter = new BoardPresenter({
-  container:eventListElement,pointModel
+  container:eventListElement,
+  destinationsModel,
+  offersModel,
+  pointModel,
 });
 
 render(new NewWayFilterView(), siteFilterElement);
-render(new NewInfoView(), siteMainelement, RenderPosition.AFTERBEGIN);
+render(new NewInfoView(), tripInfoElement, RenderPosition.AFTERBEGIN);
 
 boardPresenter.init();
 

@@ -1,4 +1,8 @@
-function createFormTemplite(){
+
+function createFormTemplite({point, pointDestination, pointOffers}){
+  const {
+    basePrice, dateFrom, dateTo, isFavorite, offers, type
+  } = point;
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
     <div class="event__type-wrapper">
@@ -14,12 +18,12 @@ function createFormTemplite(){
 
           <div class="event__type-item">
             <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-            <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
+            <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-            <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
+            <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
           </div>
 
           <div class="event__type-item">
@@ -62,7 +66,7 @@ function createFormTemplite(){
 
     <div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">
-        Flight
+      ${type}
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
       <datalist id="destination-list-1">
@@ -85,7 +89,7 @@ function createFormTemplite(){
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+      <input class="event__input  event__input--${basePrice}" id="event-price-1" type="text" name="event-price" value="">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -101,7 +105,7 @@ function createFormTemplite(){
           <label class="event__offer-label" for="event-offer-luggage-1">
             <span class="event__offer-title">Add luggage</span>
             &plus;&euro;&nbsp;
-            <span class="event__offer-price">30</span>
+            <span class="event__offer-price">${basePrice}</span>
           </label>
         </div>
 
@@ -110,7 +114,7 @@ function createFormTemplite(){
           <label class="event__offer-label" for="event-offer-comfort-1">
             <span class="event__offer-title">Switch to comfort class</span>
             &plus;&euro;&nbsp;
-            <span class="event__offer-price">100</span>
+            <span class="event__offer-price">${basePrice}</span>
           </label>
         </div>
 
@@ -119,7 +123,7 @@ function createFormTemplite(){
           <label class="event__offer-label" for="event-offer-meal-1">
             <span class="event__offer-title">Add meal</span>
             &plus;&euro;&nbsp;
-            <span class="event__offer-price">15</span>
+            <span class="event__offer-price">${basePrice}</span>
           </label>
         </div>
 
@@ -128,7 +132,7 @@ function createFormTemplite(){
           <label class="event__offer-label" for="event-offer-seats-1">
             <span class="event__offer-title">Choose seats</span>
             &plus;&euro;&nbsp;
-            <span class="event__offer-price">5</span>
+            <span class="event__offer-price">${basePrice}</span>
           </label>
         </div>
 
@@ -137,7 +141,7 @@ function createFormTemplite(){
           <label class="event__offer-label" for="event-offer-train-1">
             <span class="event__offer-title">Travel by train</span>
             &plus;&euro;&nbsp;
-            <span class="event__offer-price">40</span>
+            <span class="event__offer-price">${basePrice}</span>
           </label>
         </div>
       </div>

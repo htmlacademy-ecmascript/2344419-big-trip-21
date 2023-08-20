@@ -4,12 +4,18 @@ import { createWayPointTemplite } from '../template/waypoints-template.js';
 
 
 export default class NewWayPointView{
-  constructor({point}){
+  constructor({point, pointDestination, pointOffers}){
     this.point = point;
+    this.pointDestination = pointDestination;
+    this.pointOffers = pointOffers;
   }
 
   getTemplate(){
-    return createWayPointTemplite(this.point);
+    return createWayPointTemplite({
+      point: this.point,
+      pointDestination: this.pointDestination,
+      pointOffers:this.pointOffers,
+    });
   }
 
   getElement(){

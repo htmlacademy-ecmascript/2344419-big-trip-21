@@ -4,8 +4,19 @@ import { createFormTemplite } from '../template/creation-form-template.js';
 
 
 export default class NewCreateFormView{
+  constructor({point, pointDestination, pointOffers}){
+    this.point = point;
+    this.pointDestination = pointDestination;
+    this.pointOffers = pointOffers;
+  }
+
   getTemplate(){
-    return createFormTemplite();
+    return createFormTemplite({
+      point: this.point,
+      pointDestination: this.pointDestination,
+      pointOffers:this.pointOffers,
+    });
+
   }
 
   getElement(){

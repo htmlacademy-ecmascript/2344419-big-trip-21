@@ -1,10 +1,10 @@
-import {getRandomPoint} from '../mock/waypoints-mock.js';
-const POINT_COUNT = 3;
+export default class PointsModel {
+  constructor(service){
+    this.service = service;
+    this.points = this.service.getPoints();
+  }
 
-export default class PointModel {
-  point = Array.from({length:POINT_COUNT},getRandomPoint);//создаем массив точек
-
-  getPoint(){
-    return this.point;
+  get(){
+    return this.points;
   }
 }
