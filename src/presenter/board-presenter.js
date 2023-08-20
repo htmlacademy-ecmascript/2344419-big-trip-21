@@ -21,7 +21,7 @@ export default class BoardPresenter {
     render(this.sortComponent, this.container);//сортировка
     render(this.eventListComponent, this.container);//список
     render(new NewCreateFormView({
-      point:this.points[0],
+      point: this.points[0],
       pointDestination: this.destinationsModel.get(),
       pointOffer: this.offersModel.get()
     }),

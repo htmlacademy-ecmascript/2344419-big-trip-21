@@ -31,7 +31,7 @@ const formatStringToTime = (inputDate) =>//протяженность маршр
 const capitalize = (string) =>`${string[0].toUpperCase()}${string.slice(1)}`;
 
 const getPointDuration = (dateFrom, dateTo) => {//время нахождения в точке
-  const timeDiff = dayjs(dateTo).diff(dayjs(dateFrom));
+  const timeDiff = dayjs(dateFrom).diff(dayjs(dateTo));
   let pointDuration = 0;
   switch (true){
     case (timeDiff >= MSEC_IN_DAY):
