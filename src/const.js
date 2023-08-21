@@ -51,4 +51,25 @@ const FAVORIT = [
   false,
 ];
 
-export{ WAYPOINT_TYPE, CITIES_NAMES, ARR_DESRIPTIONS, FAVORIT, DESTINATION_COUNT, OFFER_COUNT, POINT_COUNT, DEFAULT_TYPE, POINT_EMPTY};
+const BLANK_POINT = {
+  id: 0,
+  basePrice: null,
+  dateFrom: null,
+  dateTo: null,
+  destination: null,
+  isFavorite: false,
+  offers: [],
+  type:'flight'
+};
+export {
+  WAYPOINT_TYPE,
+  CITIES_NAMES,
+  ARR_DESRIPTIONS,
+  FAVORIT,
+  DESTINATION_COUNT,
+  OFFER_COUNT,
+  POINT_COUNT,
+  DEFAULT_TYPE,
+  POINT_EMPTY,
+  BLANK_POINT
+};

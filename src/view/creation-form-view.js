@@ -1,10 +1,10 @@
 //форма создания и редакторования
 import { createElement } from '../render.js';
 import { createFormTemplite } from '../template/creation-form-template.js';
-
+import { BLANK_POINT } from '../const.js';
 
 export default class NewCreateFormView{
-  constructor({point, pointDestination, pointOffers}){
+  constructor({point = BLANK_POINT, pointDestination, pointOffers}){
     this.point = point;
     this.pointDestination = pointDestination;
     this.pointOffers = pointOffers;
