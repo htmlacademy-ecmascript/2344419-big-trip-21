@@ -3,9 +3,10 @@ import NewInfoView from './view/info-container-view.js';
 import BoardPresenter from './presenter/board-presenter.js';
 import PointModel from './model/points-model.js';
 import MockService from './mock/service-mock.js';
-import DestinationsModel from './model/destination-model.js';
+import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
-import { RenderPosition, render } from './render.js';
+import { RenderPosition } from './render.js';
+import { render } from './framework/render.js';
 
 const body = document.querySelector('body');//боди
 const header = body.querySelector('.page-header');//хедер

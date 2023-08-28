@@ -1,20 +1,10 @@
-import { createElement } from '../render.js';
+
 import { infoContainerTemplite } from '../template/info-container-template.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 
-export default class NewInfoView{
-  getTemplate(){
+export default class InfoView extends AbstractView{
+  get template(){
     return infoContainerTemplite();
-  }
-
-  getElement(){
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement(){
-    this.element = null;
   }
 }

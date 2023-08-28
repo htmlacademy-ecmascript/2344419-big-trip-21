@@ -1,20 +1,9 @@
 //сортировка
-import { createElement } from '../render.js';
 import { createSortingTemplite } from '../template/sorting-template.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
-export default class NewSortingView{
-  getTemplate(){
+export default class SortingView extends AbstractView{
+  get template(){
     return createSortingTemplite();
-  }
-
-  getElement(){
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement(){
-    this.element = null;
   }
 }

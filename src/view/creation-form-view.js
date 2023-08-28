@@ -1,32 +1,47 @@
 //форма создания и редакторования
-import { createElement } from '../render.js';
+
 import { createFormTemplite } from '../template/creation-form-template.js';
 import { BLANK_POINT } from '../const.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
-export default class NewCreateFormView{
-  constructor({point = BLANK_POINT, pointDestination, pointOffers}){
-    this.point = point;
-    this.pointDestination = pointDestination;
-    this.pointOffers = pointOffers;
+
+export default class CreateFormView extends AbstractView{
+  #point = null;
+  #pointDestination = null;
+  #pointOffers = null;
+  #handleFormSubmit = null;
+  #handleCloseClick = null;
+
+
+  constructor({point = BLANK_POINT, pointDestination, pointOffers, onFormSubmit, onCloseClick}){
+    super();
+    this.#point = point;
+    this.#pointDestination = pointDestination;
+    this.#pointOffers = pointOffers;
+    this.#handleFormSubmit = onFormSubmit;//функция сохранения формы
+    this.#handleCloseClick = onCloseClick;//закрытие формы
+
+    this.element.querySelector('.event__save-btn')//кнопка сохранения
+      .addEventListener('submit',this.#formSubmitHandler);
+    this.element.querySelector('.event__reset-btn')//кнопка очистить
+      .addEventListener('click',this.#formCancelHandler);
   }
 
-  getTemplate(){
+  get template(){
     return createFormTemplite({
-      point: this.point,
-      pointDestination: this.pointDestination,
-      pointOffers:this.pointOffers,
+      point: this.#point,
+      pointDestination: this.#pointDestination,
+      pointOffers:this.#pointOffers,
     });
-
   }
 
-  getElement(){
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
+  #formSubmitHandler = (evt) =>{
+    evt.preventDefault();//отмена действий по умолчанию
+    this.#handleFormSubmit();//вызов функции сохранения
+  };
 
-  removeElement(){
-    this.element = null;
-  }
+  #formCancelHandler = (evt) =>{
+    evt.preventDefault();//отмена действий по умолчанию
+    this.#handleCloseClick();//вызов функции закрытия
+  };
 }
