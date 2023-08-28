@@ -1,7 +1,7 @@
 const DESTINATION_COUNT = 1;
 const OFFER_COUNT = 5;
 const POINT_COUNT = 4;
-const DEFAULT_TYPE = 'taxi';
+const DEFAULT_TYPE = 'flight';
 
 const WAYPOINT_TYPE = [
   'Taxi',
