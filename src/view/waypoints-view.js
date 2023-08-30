@@ -16,8 +16,8 @@ export default class WayPointView extends AbstractView{
     this.#pointOffers = pointOffers;
     this.#handleEditClick = onEditClick;//функция вызова формы редактирования
 
-    this.element.querySelector('.event__rollup-btn')//находим кнопку в элементе
-      .addEventListener('click',this.#editClickHandler);//вешаем обработчик
+    this.element.querySelector('.event__rollup-btn')//кнопка стрелка вниз
+      .addEventListener('click',this.#editClickHandler);
   }
 
   get template(){

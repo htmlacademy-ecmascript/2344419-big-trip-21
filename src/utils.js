@@ -21,6 +21,9 @@ const DATE_FORMAT = {
   watchMinute: 'HH:mm',
 };
 
+const CreateToUpperCase = (word) =>
+  word.charAt(0).toUpperCase() + word.slice(1);
+
 const FormatStringToShortDate = (inputDate) =>//дата маршрута малая
   inputDate ? dayjs(inputDate).format(DATE_FORMAT.monthDay) : '';
 const formatSrtingToDateTime = (inputDate) =>// полная дата начала и конца маршрута
@@ -69,4 +72,12 @@ const getDate = ({next}) => {//формируем дату
   return date;
 };
 
-export{ getRandomArrayElement, getRandomId, getDate, FormatStringToShortDate, formatSrtingToDateTime , formatStringToTime, capitalize, getPointDuration };
+export{ getRandomArrayElement,
+  getRandomId,
+  getDate,
+  FormatStringToShortDate,
+  formatSrtingToDateTime,
+  formatStringToTime,
+  capitalize,
+  getPointDuration,
+  CreateToUpperCase };

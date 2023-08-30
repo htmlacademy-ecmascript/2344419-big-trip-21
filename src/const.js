@@ -61,6 +61,14 @@ const BLANK_POINT = {
   offers: [],
   type:'flight'
 };
+
+const FilterType = {
+  EVERYTHING: 'everything',//все
+  FUTURE:'future',//будущее
+  PRESENT:'present',//настоящее
+  PAST:'past',};//прошлое
+
+
 export {
   WAYPOINT_TYPE,
   CITIES_NAMES,
@@ -71,5 +79,6 @@ export {
   POINT_COUNT,
   DEFAULT_TYPE,
   POINT_EMPTY,
-  BLANK_POINT
+  BLANK_POINT,
+  FilterType
 };

@@ -2,6 +2,7 @@ import SortingView from '../view/sorting-view.js';//сортировка
 import CreateFormView from '../view/creation-form-view.js';//форма редактирования
 import WayPointView from '../view/waypoints-view.js';// один маршрут
 import EventListView from '../view/event-list-view.js';//список
+import NoPointView from '../view/no-point-view.js';//заглушка
 
 import { render, replace } from '../framework/render.js';
 
@@ -24,6 +25,10 @@ export default class BoardPresenter {
   }
 
   init() {
+    this.#renderBoard();
+  }
+
+  #renderBoard(){
     render(this.#sortComponent, this.#container);//сортировка
     render(this.#eventListComponent, this.#container);//список
     this.#renderPointsList();//точки
@@ -35,7 +40,7 @@ export default class BoardPresenter {
         this.#renderPoint(point);
       });
     } else {
-      render(new EventListView(), this.#container);
+      render(new NoPointView(), this.#container);
     }
   }
 
@@ -67,7 +72,7 @@ export default class BoardPresenter {
         replaceFormToPoint();//скрываем форму редактирования открываем точку
         document.removeEventListener('keydown',escKeyDownHandler);//удаляем обработчик
       },
-      onCloseClick:()=>{
+      onArrowUpClick:()=>{
         replaceFormToPoint();//скрываем форму редактирования открываем точку
         document.removeEventListener('keydown',escKeyDownHandler);//удаляем обработчик
       }
@@ -78,7 +83,7 @@ export default class BoardPresenter {
     function replaceFormToPoint(){
       replace(pointComponent,pointEditComponent);//скрываем форму редактирования открываем точку
     }
-    render (pointComponent, this.#eventListComponent.element);//отрисовываем точки в контейнер
+    render (pointComponent, this.#container);//отрисовываем точки в контейнер
   }
 }
 

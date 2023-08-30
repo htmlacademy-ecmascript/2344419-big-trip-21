@@ -10,21 +10,21 @@ export default class CreateFormView extends AbstractView{
   #pointDestination = null;
   #pointOffers = null;
   #handleFormSubmit = null;
-  #handleCloseClick = null;
+  #handleArrowUpClick = null;
 
 
-  constructor({point = BLANK_POINT, pointDestination, pointOffers, onFormSubmit, onCloseClick}){
+  constructor({point = BLANK_POINT, pointDestination, pointOffers, onFormSubmit, onArrowUpClick}){
     super();
     this.#point = point;
     this.#pointDestination = pointDestination;
     this.#pointOffers = pointOffers;
     this.#handleFormSubmit = onFormSubmit;//функция сохранения формы
-    this.#handleCloseClick = onCloseClick;//закрытие формы
+    this.#handleArrowUpClick = onArrowUpClick;//закрытие формы
 
     this.element.querySelector('.event__save-btn')//кнопка сохранения
       .addEventListener('submit',this.#formSubmitHandler);
-    this.element.querySelector('.event__reset-btn')//кнопка очистить
-      .addEventListener('click',this.#formCancelHandler);
+    this.element.querySelector('.event__rollup-btn')//стрелка
+      .addEventListener('click',this.#formArrowUpHandler);
   }
 
   get template(){
@@ -40,8 +40,8 @@ export default class CreateFormView extends AbstractView{
     this.#handleFormSubmit();//вызов функции сохранения
   };
 
-  #formCancelHandler = (evt) =>{
+  #formArrowUpHandler = (evt) =>{
     evt.preventDefault();//отмена действий по умолчанию
-    this.#handleCloseClick();//вызов функции закрытия
+    this.#handleArrowUpClick();//вызов функции закрытия
   };
 }

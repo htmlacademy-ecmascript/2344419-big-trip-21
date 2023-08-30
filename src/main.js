@@ -1,4 +1,4 @@
-import NewWayFilterView from './view/filters-view.js';
+import FilterView from './view/filters-view.js';
 import NewInfoView from './view/info-container-view.js';
 import BoardPresenter from './presenter/board-presenter.js';
 import PointModel from './model/points-model.js';
@@ -7,6 +7,7 @@ import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
 import { RenderPosition } from './render.js';
 import { render } from './framework/render.js';
+import { generateFilter } from './mock/filter-mock.js';
 
 const body = document.querySelector('body');//боди
 const header = body.querySelector('.page-header');//хедер
@@ -19,6 +20,8 @@ const mockService = new MockService();
 const destinationsModel = new DestinationsModel(mockService);
 const offersModel = new OffersModel(mockService);
 const pointModel = new PointModel(mockService);
+const filters = generateFilter(mockService.points);
+
 
 const boardPresenter = new BoardPresenter({
   container:eventListElement,
@@ -27,7 +30,7 @@ const boardPresenter = new BoardPresenter({
   pointModel,
 });
 
-render(new NewWayFilterView(), siteFilterElement);
+render(new FilterView({filters}), siteFilterElement);
 render(new NewInfoView(), tripInfoElement, RenderPosition.AFTERBEGIN);
 
 boardPresenter.init();
