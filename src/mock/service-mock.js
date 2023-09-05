@@ -2,7 +2,7 @@ import { generateMockOffers } from './offers-mock.js';
 import { generateMockDestinations } from './destinations-mock.js';
 import { generateMockPoints } from './waypoints-mock.js';
 import { WAYPOINT_TYPE, DESTINATION_COUNT, POINT_COUNT, OFFER_COUNT } from '../const.js';
-import { getRandomArrayElement, getRandomId } from '../utils.js';
+import { getRandomArrayElement, getRandomId } from '../utils/utils.js';
 
 export default class MockService {
   destinations = [];

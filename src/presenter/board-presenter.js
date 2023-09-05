@@ -1,89 +1,122 @@
 import SortingView from '../view/sorting-view.js';//сортировка
-import CreateFormView from '../view/creation-form-view.js';//форма редактирования
-import WayPointView from '../view/waypoints-view.js';// один маршрут
 import EventListView from '../view/event-list-view.js';//список
 import NoPointView from '../view/no-point-view.js';//заглушка
-
-import { render, replace } from '../framework/render.js';
+import PointPresenter from './point-presenter.js';
+import { sort } from '../utils/utils-sort.js';
+import { updateItem } from '../utils/utils.js';
+import { sortType, enabledSortType } from '../const.js';
+import { render, remove, replace } from '../framework/render.js';
 
 export default class BoardPresenter {
   #container = null;
+  #sortComponent = null;
+  #eventListComponent = null;
   #pointModel = null;
   #offersModel = null;
   #destinationsModel = null;
   #points = [];
+  #currentSortType = sortType.DAY;
 
-  #eventListComponent = new EventListView();
-  #sortComponent = new SortingView();
+  #pointPresenters = new Map();
+  #noPointComponent = new NoPointView();
 
   constructor({container, pointModel, offersModel, destinationsModel}){
     this.#container = container;
     this.#pointModel = pointModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
-    this.#points = [...this.#pointModel.get()];
+
+    this.#points = sort[sortType.DAY]([...this.#pointModel.get()]);
   }
+
 
   init() {
     this.#renderBoard();
   }
 
+  #renderPoint(point){//отрисовка  одной точки
+    const pointPresenter = new PointPresenter({
+      container:this.#eventListComponent.element,
+      destinationsModel:this.#destinationsModel,
+      offersModel:this.#offersModel,
+      onDataChange:this.#pointChangeHandler,
+      onModeChange:this.#modeChangeHandler,
+    });
+    pointPresenter.init(point);
+    this.#pointPresenters.set(point.id, pointPresenter);
+  }
+
+  #sortPoints = (inSortType)=>{///////////////////////////////////////////
+    this.#currentSortType = inSortType;//////////////////////////////////////
+    this.#points = sort[this.#currentSortType](this.#points);///////////////////////////
+  };
+
   #renderBoard(){
-    render(this.#sortComponent, this.#container);//сортировка
-    render(this.#eventListComponent, this.#container);//список
-    this.#renderPointsList();//точки
-  }
-
-  #renderPointsList() {
-    if (this.#points.length) {
-      this.#points.forEach((point) => {
-        this.#renderPoint(point);
-      });
-    } else {
-      render(new NoPointView(), this.#container);
+    if (this.#points.length === 0){
+      render(this.#renderNoPoint, this.#container);//заглушка
+      return;
     }
+    this.#renderSort();
+    this.#renderPointContainer();
+    this.#renderPoints();
   }
 
-
-  #renderPoint(point){//отрисовка точки
-    const escKeyDownHandler = (evt)=>{
-      if(evt.key === 'Escape'){//проверяем какая клавиша нажата
-        evt.preventDefault();//отменяем депйствия по умолчанию
-        replaceFormToPoint();//скрываем форму редактирования открываем точку
-        document.removeEventListener('keydown',escKeyDownHandler);//удаляем обрабокчик
-      }
-    };
-
-    const pointComponent = new WayPointView({//создаем стандартную точку
-      point,
-      pointDestination: this.#destinationsModel.getById(point.destination),
-      pointOffers: this.#offersModel.getByType(point.type),
-      onEditClick: ()=>{//обработчик клика по стрелке
-        replacePointToForm();//скрываем точку открываем форму
-        document.addEventListener('keydown',escKeyDownHandler);
-      }
+  #renderPoints = () =>{//отрисовка коллекции точек
+    this.#points.forEach((point)=>{
+      this.#renderPoint(point);
     });
+  };
 
-    const pointEditComponent = new CreateFormView({//форма редактирования
-      point,
-      pointDestination: this.#destinationsModel.get(),
-      pointOffers: this.#offersModel.get(),
-      onFormSubmit:()=>{
-        replaceFormToPoint();//скрываем форму редактирования открываем точку
-        document.removeEventListener('keydown',escKeyDownHandler);//удаляем обработчик
-      },
-      onArrowUpClick:()=>{
-        replaceFormToPoint();//скрываем форму редактирования открываем точку
-        document.removeEventListener('keydown',escKeyDownHandler);//удаляем обработчик
-      }
-    });
-    function replacePointToForm(){
-      replace(pointEditComponent,pointComponent);//скрываем точку открываем форму
-    }
-    function replaceFormToPoint(){
-      replace(pointComponent,pointEditComponent);//скрываем форму редактирования открываем точку
-    }
-    render (pointComponent, this.#container);//отрисовываем точки в контейнер
+  #clearPoints = () =>{//удаление точек
+    this.#pointPresenters.forEach((presenter)=>presenter.destroy());
+    this.#pointPresenters.clear();
+  };
+
+  #renderNoPoint(){//отрисовка при отсутствии точек
+    render(this.#noPointComponent, this.#container);
   }
+
+  #renderSort(){//отрисовка сортировки
+    const prevSortComponent = this.#sortComponent;
+    const sortTypes = Object.values(sortType).map((type)=>({
+      type,
+      isChecked:(type === this.#currentSortType),
+      isDisabled:!enabledSortType[type]
+    }));
+    this.#sortComponent = new SortingView({
+      items:sortTypes,
+      onItemChange:this.#sortTypeChangeHandler
+    });
+    if (prevSortComponent){
+      replace(this.#sortComponent,prevSortComponent);
+      remove(prevSortComponent);
+    } else{
+      render(this.#sortComponent,this.container);
+    }
+  }
+
+  #renderPointContainer = () => {
+    this.#eventListComponent = new EventListView();
+    render (this.#eventListComponent,this.#container);
+  };
+
+
+  #pointChangeHandler = (updatedPoint) => {
+    this.#points = updateItem(this.#points, updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  };
+
+  #sortTypeChangeHandler = (SortType)=>{
+
+    this.#sortPoints(SortType);
+    this.#clearPoints();
+    this.#renderSort();
+    this.#renderPoints();
+  };
+
+  #modeChangeHandler = () =>{
+    this.#pointPresenters.forEach((presenter) => presenter.resetView());
+  };
+
 }
 
