@@ -41,6 +41,7 @@ export default class PointPresenter{
       pointOffers: this.#offersModel.get(),
       onFormSubmit:this.#handleFormSubmit,//сохранение
       onArrowUpClick:this.#handleEditClick,//переключение стрелка
+      onDeleteClick:this.#handleDeleteClick,//удаление
     });
 
     if(prevPointComponent === null || prevPointEditComponent === null){
