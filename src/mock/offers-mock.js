@@ -1,4 +1,4 @@
-import { getRandomId } from '../utils.js';
+import { getRandomId } from '../utils/utils.js';
 
 const generateMockOffers = (type) => ({
   id: crypto.randomUUID,

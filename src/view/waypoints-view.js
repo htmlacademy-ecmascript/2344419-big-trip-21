@@ -8,16 +8,20 @@ export default class WayPointView extends AbstractView{
   #pointDestination = null;
   #pointOffers = null;
   #handleEditClick = null;
+  #handleFavoriteClick = null;
 
-  constructor({point, pointDestination, pointOffers, onEditClick }){
+  constructor({point, pointDestination, pointOffers, onEditClick, onFavoriteClick }){
     super();
     this.#point = point;
     this.#pointDestination = pointDestination;
     this.#pointOffers = pointOffers;
     this.#handleEditClick = onEditClick;//функция вызова формы редактирования
+    this.#handleFavoriteClick = onFavoriteClick;//звездочка
 
     this.element.querySelector('.event__rollup-btn')//кнопка стрелка вниз
       .addEventListener('click',this.#editClickHandler);
+    this.element.querySelector('.event__favorite-btn')//звезда
+      .addEventListener('click', this.#favoriteClickHandler);
   }
 
   get template(){
@@ -28,8 +32,13 @@ export default class WayPointView extends AbstractView{
     });
   }
 
-  #editClickHandler = (evt) =>{
-    evt.preventDefault();// отмена действий по умолчанию
-    this.#handleEditClick();//вызываем функцию обработчика
+  #editClickHandler = (evt) =>{//стрелка
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
+
+  #favoriteClickHandler = (evt) => {//смена звездочки
+    evt.preventDefault();
+    this.#handleFavoriteClick();
   };
 }
