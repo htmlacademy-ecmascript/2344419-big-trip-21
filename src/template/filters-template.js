@@ -1,11 +1,12 @@
 
-function createFilterItemTemplite(filter, isCheked){
+function getFilterItem(filter, isCheked){
   const {type,count} = filter;
   return (`<div class="trip-filters__filter">
   <input
   id="filter-${type}"
   class="trip-filters__filter-input  visually-hidden"
   type="radio"
+  data-item="${type}"
   name="trip-filter"
   ${isCheked ? 'checked' : ''}
   ${count === 0 ? 'disabled' : ''}
@@ -15,15 +16,13 @@ function createFilterItemTemplite(filter, isCheked){
   </div>
   `);
 }
-function createWayPointTemplite(FilterItems){
-  const filterItemsTemplite = FilterItems
-    .map((filter,index)=> createFilterItemTemplite(filter,index === 0)).join('');
-  return(
-    `<form class="trip-filters" action="#" method="get">
-        ${filterItemsTemplite}
-        <button class="visually-hidden" type="submit">Accept filter</button>
-        </form>`
-  );
+function createWayPointTemplite(filterItems){
+  const filterItemsTemplate = filterItems.map((filter, index) => getFilterItem(filter, index === 0)).join('');
+  return `
+    <form class="trip-filters" action="#" method="get">
+        ${filterItemsTemplate}
+      <button class="visually-hidden" type="submit">Accept filter</button>
+    </form>`;
 }
 
 
