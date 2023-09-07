@@ -1,4 +1,4 @@
-import{formatSrtingToDateTime, CreateToUpperCase } from '../utils.js';
+import{formatSrtingToDateTime, CreateToUpperCase } from '../utils/utils.js';
 import { BLANK_POINT } from '../const.js';
 
 function createListOffers(offers) {

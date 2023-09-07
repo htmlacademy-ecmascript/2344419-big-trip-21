@@ -51,6 +51,14 @@ const FAVORIT = [
   false,
 ];
 
+const sortType = {
+  DAY:'day',
+  TIME:'time',
+  EVENT:'event',
+  OFFER:'offer',
+  PRICE:'price',
+};
+
 const BLANK_POINT = {
   id: 0,
   basePrice: null,
@@ -61,6 +69,13 @@ const BLANK_POINT = {
   offers: [],
   type:'flight'
 };
+const enabledSortType = {
+  [sortType.DAY]: true,
+  [sortType.EVENT]: false,
+  [sortType.TIME]: true,
+  [sortType.PRICE]: true,
+  [sortType.OFFER]: false
+};
 
 const FilterType = {
   EVERYTHING: 'everything',//все
@@ -68,8 +83,14 @@ const FilterType = {
   PRESENT:'present',//настоящее
   PAST:'past',};//прошлое
 
+const Mode = {
+  DEFAULT:'DEFAULT',
+  EDITING:'EDITING',
+};
 
-export {
+export {Mode,
+  sortType,
+  enabledSortType,
   WAYPOINT_TYPE,
   CITIES_NAMES,
   ARR_DESRIPTIONS,
