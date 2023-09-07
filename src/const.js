@@ -88,7 +88,7 @@ const Mode = {
   EDITING:'EDITING',
 };
 
-export {Mode,
+export { Mode,
   sortType,
   enabledSortType,
   WAYPOINT_TYPE,

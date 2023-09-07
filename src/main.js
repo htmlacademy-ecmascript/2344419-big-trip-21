@@ -20,7 +20,7 @@ const mockService = new MockService();
 const destinationsModel = new DestinationsModel(mockService);
 const offersModel = new OffersModel(mockService);
 const pointModel = new PointModel(mockService);
-const filters = generateFilter(mockService.points);
+const filters = generateFilter(pointModel.service.points);
 
 
 const boardPresenter = new BoardPresenter({
@@ -30,7 +30,7 @@ const boardPresenter = new BoardPresenter({
   pointModel,
 });
 
-render(new FilterView({filters}), siteFilterElement);
+render(new FilterView({items: filters}), siteFilterElement);
 render(new NewInfoView(), tripInfoElement, RenderPosition.AFTERBEGIN);
 
 boardPresenter.init();

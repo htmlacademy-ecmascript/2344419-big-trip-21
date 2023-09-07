@@ -1,7 +1,7 @@
 import {render, replace, remove} from '../framework/render.js';
 import CreateFormView from '../view/creation-form-view.js';//форма редактирования
 import WayPointView from '../view/waypoints-view.js';// один маршрут
-import {Mode} from '.../const.js';
+import {Mode} from '../const.js';
 
 export default class PointPresenter{
   #container = null;
@@ -78,7 +78,7 @@ export default class PointPresenter{
 
   #replaceFormToPoint(){
     replace(this.#pointComponent,this.#pointEditComponent);//скрываем форму редактирования открываем точку
-    document.removeEventListener('keydown',this.#escKeyDownHandler);//удаляем обработчик
+    document.removeEventListener('keydown',this.#escKeyDownHandler);
     this.#mode = Mode.DEFAULT;
   }
 
@@ -87,7 +87,6 @@ export default class PointPresenter{
     if(evt.key === 'Escape'){//проверяем какая клавиша нажата
       evt.preventDefault();//отменяем депйствия по умолчанию
       this.#replaceFormToPoint();//скрываем форму редактирования открываем точку
-      document.removeEventListener('keydown',this.#escKeyDownHandler);//удаляем обрабокчик
     }
   };
 
