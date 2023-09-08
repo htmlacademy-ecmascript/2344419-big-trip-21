@@ -1,5 +1,4 @@
 import{formatSrtingToDateTime, CreateToUpperCase } from '../utils/utils.js';
-import { BLANK_POINT } from '../const.js';
 
 function createListOffers(offers) {
   return offers.map((offer) => (`<div class="event__offer-selector">
@@ -45,7 +44,8 @@ function createPhotos(photos){
   return photos.map((e)=> (`<img class="event__photo" src=${e.src} alt="${e.description}">`)).join('');
 }
 
-function createFormTemplite({point = BLANK_POINT, pointDestination, pointOffers}){
+function createFormTemplite({state, pointDestination, pointOffers}){
+  const {point} = state;
   const {basePrice, dateFrom, dateTo, type} = point;
 
   const offersByType = pointOffers.find((item) => item.type === type).offers;

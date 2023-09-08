@@ -2,37 +2,41 @@
 
 import { createFormTemplite } from '../template/creation-form-template.js';
 import { BLANK_POINT } from '../const.js';
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
 
-export default class CreateFormView extends AbstractView{
+export default class CreateFormView extends AbstractStatefulView{
   #point = null;
   #pointDestination = null;
   #pointOffers = null;
   #handleFormSubmit = null;
   #handleArrowUpClick = null;
-  #handleCloseClick = null;
   #handleDeleteClick = null;
 
-  constructor({point = BLANK_POINT, pointDestination, pointOffers, onFormSubmit, onArrowUpClick}){
+  constructor({point = BLANK_POINT, pointDestination, pointOffers, onFormSubmit, onArrowUpClick, onDeleteClick}){
     super();
-    this.#point = point;
+    this._setState(CreateFormView.parsePointToState({point}));
     this.#pointDestination = pointDestination;
     this.#pointOffers = pointOffers;
     this.#handleFormSubmit = onFormSubmit;//функция сохранения формы
     this.#handleArrowUpClick = onArrowUpClick;//закрытие формы
+    this.#handleDeleteClick = onDeleteClick;//удаление
+    this._restoreHandlers();
+  }
 
+  _restoreHandlers = () =>{
     this.element.querySelector('.event__save-btn')//кнопка сохранения
       .addEventListener('submit',this.#formSubmitHandler);
     this.element.querySelector('.event__rollup-btn')//стрелка
       .addEventListener('click',this.#formArrowUpHandler);
     this.element.querySelector('.event__reset-btn')
       .addEventListener('click', this.#deleteClickHandler);//удалить
-  }
+
+  };
 
   get template(){
     return createFormTemplite({
-      point: this.#point,
+      state: this._state,
       pointDestination: this.#pointDestination,
       pointOffers:this.#pointOffers,
     });
@@ -53,4 +57,7 @@ export default class CreateFormView extends AbstractView{
     this.#handleDeleteClick();//удаление
   };
 
+  static parsePointToState = ({point}) =>({point});
+
+  static parseStateToPint = (state) => state.point;
 }

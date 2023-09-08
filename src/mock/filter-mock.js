@@ -1,5 +1,5 @@
+import { filter } from '../utils/utils-filter.js';
 
-import {filter} from'../utils/utils-filter.js';
 
 function generateFilter(points){
   return Object.entries(filter).map(//получем массив массивов ключ-значение из объекта и итерируемся по нему
@@ -9,4 +9,4 @@ function generateFilter(points){
     })
   );
 }
-export {generateFilter};
+export { generateFilter };
