@@ -5,6 +5,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 export default class SortingView extends AbstractView{
   #hendleSortTypeChange = null;
   #items = [];
+
   constructor({items, onSortTypeChange}){
     super();
     this.#items = items;
@@ -21,7 +22,7 @@ export default class SortingView extends AbstractView{
       return;
     }
     evt.preventDefault();
-    this.#sortTypeChangeHandler(evt.target.dataset.sortType);//передаем в обработчик тип сорт
+    this.#hendleSortTypeChange(evt.target.dataset.item);//передаем в обработчик тип сорт
   };
 
 }

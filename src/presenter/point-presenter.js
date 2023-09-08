@@ -18,7 +18,7 @@ export default class PointPresenter{
     this.#container = container;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
-    this. #handleDataChange = onDataChange;
+    this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
   }
 
@@ -40,7 +40,7 @@ export default class PointPresenter{
       pointDestination: this.#destinationsModel.get(),
       pointOffers: this.#offersModel.get(),
       onFormSubmit:this.#handleFormSubmit,//сохранение
-      onArrowUpClick:this.#handleEditClick,//переключение стрелка
+      onArrowUpClick:this.#handleArrowUpClick,//переключение стрелка
       onDeleteClick:this.#handleDeleteClick,//удаление
     });
 
@@ -69,44 +69,47 @@ export default class PointPresenter{
     remove(this.#pointEditComponent);
   };
 
-  #replacePointToForm(){
+  #replacePointToForm = () => {
     replace(this.#pointEditComponent,this.#pointComponent);//скрываем точку открываем форму
     document.addEventListener('keydown',this.#escKeyDownHandler);
     this.#handleModeChange();
     this.#mode = Mode.EDITING;
-  }
+  };
 
-  #replaceFormToPoint(){
+  #replaceFormToPoint = () => {
     replace(this.#pointComponent,this.#pointEditComponent);//скрываем форму редактирования открываем точку
     document.removeEventListener('keydown',this.#escKeyDownHandler);
     this.#mode = Mode.DEFAULT;
-  }
+  };
 
 
-  #escKeyDownHandler = (evt)=>{
+  #escKeyDownHandler = (evt) => {
     if(evt.key === 'Escape'){//проверяем какая клавиша нажата
       evt.preventDefault();//отменяем депйствия по умолчанию
       this.#replaceFormToPoint();//скрываем форму редактирования открываем точку
     }
   };
 
+  #handleArrowUpClick = () =>{
+    this.#replaceFormToPoint();//скрываем форму редактирования открываем точку
+  };
 
-  #handleEditClick = ()=>()=>{//обработчик клика по стрелке
+  #handleEditClick = () => {//обработчик клика по стрелке
     this.#replacePointToForm();//скрываем точку открываем форму
   };
 
-  #handleFormSubmit = (point)=>{
+  #handleFormSubmit = (point) => {
     this.#replaceFormToPoint();//скрываем форму редактирования открываем точку
     this.#handleDataChange(point);
   };
 
-  #handleDeleteClick = () =>{
+  #handleDeleteClick = () => {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     remove(this.#pointEditComponent);
   };
 
 
-  #handlefavoriteClick = () =>{
+  #handlefavoriteClick = () => {
     this.#handleDataChange({
       ...this.#point,
       isFavorite: !this.#point.isFavorite

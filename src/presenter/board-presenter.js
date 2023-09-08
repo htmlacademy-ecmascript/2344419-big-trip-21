@@ -46,8 +46,8 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   };
 
-  #sortPoints = (inSortType) =>{
-    this.#currentSortType = inSortType;
+  #sortPoints = (item) =>{
+    this.#currentSortType = item;
     this.#points = sort[this.#currentSortType](this.#points);
   };
 
@@ -72,7 +72,7 @@ export default class BoardPresenter {
     }));
     this.#sortComponent = new SortingView({
       items:sortTypes,
-      onItemChange:this.#sortTypechangeHandler
+      onItemChange:this.#sortTypeChangeHandler
     });
     if (prevSortComponent){
       replace(this.#sortComponent,prevSortComponent);
@@ -107,11 +107,11 @@ export default class BoardPresenter {
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
-  #sortTypechangeHandler = (inSortType)=>{
-    if(this.#currentSortType === inSortType){
+  #sortTypeChangeHandler = (item)=>{
+    if(this.#currentSortType === item){
       return;
     }
-    this.#sortPoints(inSortType);//сортируем
+    this.#sortPoints(item);//сортируем
     this.#clearPoints();//очищаем
     this.#renderSort();//рендерим сортировку
     this.#renderPoints();//рендерим список заново
