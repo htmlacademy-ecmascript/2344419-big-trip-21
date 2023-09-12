@@ -4,18 +4,18 @@ import { render } from '../framework/render.js';
 
 export default class FilterPresenter {
   #container = null;
-  #pointModel = null;
+  #pointsModel = null;
   #filters = [];
 
-  constructor({container,pointsModel: pointModel}){
+  constructor({container,pointsModel}){
     this.#container = container;
-    this.#pointModel = pointModel;
+    this.#pointsModel = pointsModel;
 
     this.#filters = Object.entries(filter)
       .map(([filterType,filterPoints],index)=>({
         type:filterType,
         isChecked:index === 0,
-        isDisabled:filterPoints(this.#pointModel.get()).length === 0,
+        isDisabled:filterPoints(this.#pointsModel.get()).length === 0,
       }));
   }
 

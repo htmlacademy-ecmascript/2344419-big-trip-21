@@ -1,5 +1,5 @@
 
-function getFilterItem(filter, isCheked){
+function getFilterItem(filter, isCheked, isDisabled){
   const {type,count} = filter;
   return (`<div class="trip-filters__filter">
   <input
@@ -8,8 +8,8 @@ function getFilterItem(filter, isCheked){
   type="radio"
   data-item="${type}"
   name="trip-filter"
-  ${isCheked ? 'checked' : ''}
-  ${count === 0 ? 'disabled' : ''}
+  ${(isCheked) ? 'checked' : ''}
+  ${(isDisabled) ? 'disabled' : ''}
   value="${type}">
   <label class="trip-filters__filter-label"
   for="filter-${type}">${type}</label>
@@ -17,7 +17,7 @@ function getFilterItem(filter, isCheked){
   `);
 }
 function createWayPointTemplite(filterItems){
-  const filterItemsTemplate = filterItems.map((filter, index) => getFilterItem(filter, index === 0)).join('');
+  const filterItemsTemplate = filterItems.map((filter) => getFilterItem(filter)).join('');
   return `
     <form class="trip-filters" action="#" method="get">
         ${filterItemsTemplate}

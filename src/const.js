@@ -1,4 +1,4 @@
-const DESTINATION_COUNT = 1;
+const DESTINATION_COUNT = 4;
 const OFFER_COUNT = 5;
 const POINT_COUNT = 4;
 const DEFAULT_TYPE = 'flight';
@@ -26,7 +26,7 @@ const POINT_EMPTY = {
 };
 
 const CITIES_NAMES = [
-  'Moskow',
+  'Moscow',
   'St. Petersburg',
   'Rio',
   'Kolomna',
@@ -53,10 +53,10 @@ const FAVORIT = [
 
 const sortType = {
   DAY:'day',
-  TIME:'time',
   EVENT:'event',
-  OFFER:'offer',
+  TIME:'time',
   PRICE:'price',
+  OFFER:'offer',
 };
 
 const BLANK_POINT = {

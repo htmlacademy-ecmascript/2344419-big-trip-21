@@ -1,5 +1,13 @@
 import{formatSrtingToDateTime, CreateToUpperCase } from '../utils/utils.js';
 
+function isFormValid(point) {
+  return point.destination !== ''
+    && point.basePrice !== ''
+
+    && point.dateFrom !== undefined
+    && point.dateTo !== undefined;
+}
+
 function createListOffers(offers) {
   return offers.map((offer) => (`<div class="event__offer-selector">
   <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="${offer.id}">
@@ -23,7 +31,8 @@ const createTypesListTemplate = (offerTypes, type) => {
           value="${item.type}"
           ${(item.type === type) ? 'checked' : ''}
         >
-        <label class="event__type-label  event__type-label--${item.type}" for="event-type-${item.type}-1">${CreateToUpperCase(item.type)}</label>
+        <label class="event__type-label  event__type-label--${item.type}"
+        for="event-type-${item.type}-1">${CreateToUpperCase(item.type)}</label>
       </div>`)).join('');
   return (
     `<div class="event__type-wrapper">
@@ -43,13 +52,33 @@ const createTypesListTemplate = (offerTypes, type) => {
 function createPhotos(photos){
   return photos.map((e)=> (`<img class="event__photo" src=${e.src} alt="${e.description}">`)).join('');
 }
+const createDatalistElement = (destinations) => {
+  const datalistElement = (destinations.length > 0)
+    ?
+    destinations.map((item) =>
+      `<option value="${item.name}"></option>`).join('')
+    : '';
 
-function createFormTemplite({state, pointDestination, pointOffers}){
+  return `
+  <datalist id="destination-list-1">
+        ${datalistElement}
+        </datalist>
+        `;
+};
+
+function createFormTemplite({state,pointDestinations, pointOffers}){
   const {point} = state;
   const {basePrice, dateFrom, dateTo, type} = point;
 
+
   const offersByType = pointOffers.find((item) => item.type === type).offers;
-  const currentDestination = pointDestination.find((item) => item.id === point.destination);
+  const photoByType = pointDestinations.find((item) => item.id === point.destination).pictures;
+
+  const currentDestination = pointDestinations.find((item) => item.id === point.destination);
+  const valueDestination = (currentDestination)
+    ? `${currentDestination.name}`
+    : '';
+
 
   return (`<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -59,12 +88,9 @@ function createFormTemplite({state, pointDestination, pointOffers}){
           <label class="event__label  event__type-output" for="event-destination-1">
           ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentDestination.name}" list="destination-list-1">
-          <datalist id="destination-list-1">
-            <option value="Amsterdam"></option>
-            <option value="Geneva"></option>
-            <option value="Chamonix"></option>
-          </datalist>
+          <input class="event__input  event__input--destination"
+          id="event-destination-1" type="text" name="event-destination" value="${valueDestination}" list="destination-list-1">
+          ${createDatalistElement(pointDestinations)}
         </div>
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
@@ -78,13 +104,17 @@ function createFormTemplite({state, pointDestination, pointOffers}){
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+          <input class="event__input  event__input--price" id="event-price-1" type="text"
+           name="event-price" value="${basePrice}">
         </div>
-        <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">Delete</button>
-        <button class="event__rollup-btn" type="button">
-          <span class="visually-hidden">Open event</span>
-        </button>
+        <button class="event__save-btn  btn  btn--blue" type="submit"
+        ${isFormValid(point) ? '' : 'disabled'}
+        >Save</button>
+        <button class="event__reset-btn" type="reset">
+        ${point.id === '' ? 'Cancel' : 'Delete'}</button>
+        ${point.id === 'template' ? '' : `<button class="event__rollup-btn" type="button">
+        <span class="visually-hidden">Open event</span>
+      </button>`}
       </header>
       <section class="event__details">
         <section class="event__section  event__section--offers">
@@ -95,10 +125,10 @@ function createFormTemplite({state, pointDestination, pointOffers}){
       </section>
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${currentDestination.description}</p>
+        <p class="event__destination-description">${currentDestination ? currentDestination.description : '' }</p>
         <div class="event__photos-container">
         <div class="event__photos-tape">
-          ${createPhotos(pointDestination[0].pictures)}
+          ${createPhotos(photoByType)}
         </div>
       </div>
     </section>
