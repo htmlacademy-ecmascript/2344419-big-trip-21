@@ -32,19 +32,19 @@ export default class PointPresenter{
       point:this.#point,
       pointDestination: this.#destinationsModel.getById(point.destination),
       pointOffers: this.#offersModel.getByType(point.type),
-      onEditClick: this.#handleEditClick,
-      onFavoriteClick:this.#handlefavoriteClick,
+      onEditClick: this.#handleEditClick,//стрелка
+      onFavoriteClick:this.#handlefavoriteClick,//звезда
     });
     this.#pointEditComponent = new CreateFormView({//форма редактирования
       point:this.#point,
-      pointDestination: this.#destinationsModel.get(),
+      pointDestinations: this.#destinationsModel.get(),
       pointOffers: this.#offersModel.get(),
       onFormSubmit:this.#handleFormSubmit,//сохранение
       onArrowUpClick:this.#handleArrowUpClick,//переключение стрелка
       onDeleteClick:this.#handleDeleteClick,//удаление
     });
 
-    if(prevPointComponent === null || prevPointEditComponent === null){
+    if(prevPointComponent === null || prevPointEditComponent === null){//если первый раз
       render(this.#pointComponent, this.#container);
       return;
     }
@@ -58,8 +58,9 @@ export default class PointPresenter{
     remove(prevPointEditComponent);
   }
 
-  resetView = () => {//очищаем
+  resetView = () => {//закрываем предыдущую форму
     if(this.#mode !== Mode.DEFAULT){
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   };
@@ -86,11 +87,13 @@ export default class PointPresenter{
   #escKeyDownHandler = (evt) => {
     if(evt.key === 'Escape'){//проверяем какая клавиша нажата
       evt.preventDefault();//отменяем депйствия по умолчанию
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();//скрываем форму редактирования открываем точку
     }
   };
 
   #handleArrowUpClick = () =>{
+    this.#pointEditComponent.reset(this.#point);
     this.#replaceFormToPoint();//скрываем форму редактирования открываем точку
   };
 

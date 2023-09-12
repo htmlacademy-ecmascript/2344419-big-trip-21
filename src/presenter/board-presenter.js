@@ -21,9 +21,9 @@ export default class BoardPresenter {
   #pointPresenters = new Map();//ассоциативный массив
   #noPointComponent = new NoPointView();
 
-  constructor({container, pointModel, offersModel, destinationsModel}){
+  constructor({container, pointModel: pointsModel, offersModel, destinationsModel}){
     this.#container = container;
-    this.#pointModel = pointModel;
+    this.#pointModel = pointsModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
 
@@ -65,11 +65,12 @@ export default class BoardPresenter {
   #renderSort = () => {//отрисовка сортировки
     const prevSortComponent = this.#sortComponent;
 
-    const sortTypes = Object.values(sortType).map((type)=>({
-      type,
-      isChecked:(type === this.#currentSortType),
-      isDisabled:!enabledSortType[type]
-    }));
+    const sortTypes = Object.values(sortType)
+      .map((type)=>({
+        type,
+        isChecked:(type === this.#currentSortType),
+        isDisabled:!enabledSortType[type]
+      }));
     this.#sortComponent = new SortingView({
       items:sortTypes,
       onItemChange:this.#sortTypeChangeHandler
@@ -87,6 +88,10 @@ export default class BoardPresenter {
     render(this.#eventListComponent,this.#container);
   };
 
+  #renderNoPoint = () => {//отрисовка при отсутствии точек
+    render(this.#noPointComponent, this.#container);
+  };
+
   #renderBoard = () => {
     if (this.#points.length === 0){
       render(this.#renderNoPoint, this.#container);//заглушка
@@ -97,10 +102,6 @@ export default class BoardPresenter {
     this.#renderPoints();
   };
 
-  #renderNoPoint = () => {//отрисовка при отсутствии точек
-    render(this.#noPointComponent, this.#container);
-  };
-
   #pointChangeHandler = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);//обновили массив
     this.#sourcedBoardPoint = updateItem(this.#sourcedBoardPoint);
@@ -108,9 +109,6 @@ export default class BoardPresenter {
   };
 
   #sortTypeChangeHandler = (item)=>{
-    if(this.#currentSortType === item){
-      return;
-    }
     this.#sortPoints(item);//сортируем
     this.#clearPoints();//очищаем
     this.#renderSort();//рендерим сортировку
