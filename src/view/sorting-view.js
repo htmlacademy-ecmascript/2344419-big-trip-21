@@ -18,9 +18,6 @@ export default class SortingView extends AbstractView{
   }
 
   #sortTypeChangeHandler = (evt)=>{
-    // if(evt.target.tagName === 'A'){//проверяем клик
-    //   return;
-    // }
 
     evt.preventDefault();
     this.#handleSortTypeChange(evt.target.dataset.item);//передаем в обработчик тип сорт
