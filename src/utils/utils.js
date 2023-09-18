@@ -71,13 +71,10 @@ const getDate = ({next}) => {//формируем дату
   }
   return date;
 };
-const updateItem = (items, update) =>
-  items.map((item) => item.id === update.id ? update : item);
 
 export{ getRandomArrayElement,
   getRandomId,
   getDate,
-  updateItem,
   FormatStringToShortDate,
   formatSrtingToDateTime,
   formatStringToTime,

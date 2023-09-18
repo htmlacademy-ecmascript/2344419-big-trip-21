@@ -26,4 +26,7 @@ const sort = {
   }
 };
 
-export {sort};
+function isDateEqual(dateA, dateB) {
+  return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
+}
+export {sort, getPointsDateDifference, getPointsPriceDifference, getPointsTimeDifference, isDateEqual };

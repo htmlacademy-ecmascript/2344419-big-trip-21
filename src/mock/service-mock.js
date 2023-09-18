@@ -1,60 +1,92 @@
-import { generateMockOffers } from './offers-mock.js';
-import { generateMockDestinations } from './destinations-mock.js';
-import { generateMockPoints } from './waypoints-mock.js';
-import { WAYPOINT_TYPE, DESTINATION_COUNT, POINT_COUNT, OFFER_COUNT } from '../const.js';
-import { getRandomArrayElement, getRandomId } from '../utils/utils.js';
+import Observable from '../framework/observable.js';
+import {UpdateType} from '../const.js';
 
-export default class MockService {
+export default class MockService extends Observable{
   destinations = [];
   offers = [];
   points = [];
+  pointsApiService = null;
 
-  constructor(){
-    this.destinations = this.generateDestinations();
-    this.offers = this.generateOffers();
-    this.points = this.generatePoints();
+  constructor({pointsApiService}) {
+    super();
+    this.pointsApiService = pointsApiService;
   }
 
-  getDestinations(){
+  getDestinations() {
     return this.destinations;
   }
 
-  getOffers(){
+  getOffers() {
     return this.offers;
   }
 
-  getPoints(){
+  getPoints() {
     return this.points;
   }
 
-  generateDestinations(){
-    return Array.from(
-      {length:DESTINATION_COUNT},
-      ()=>generateMockDestinations()
-    );
+  async init() {
+    try {
+      this.destinations = await this.pointsApiService.destinations;
+      this.offers = await this.pointsApiService.offers;
+      const points = await this.pointsApiService.points;
+      this.points = points.map(this.adaptToClient);
+    } catch (err) {
+      this.destinations = [];
+      this.offers = [];
+      this.points = [];
+    }
+    this._notify(UpdateType.INIT, this.points);
   }
 
-  generateOffers(){
-    return WAYPOINT_TYPE.map((type)=>({
-      type,
-      offers:Array.from({length:getRandomId(0,OFFER_COUNT)}, ()=>generateMockOffers(type))
-    }));
+  async updatePoint(updateType, update) {
+    const index = this.points.findIndex((point) => point.id === update.id);
+
+    if (index === -1) {
+      throw new Error('Can\'t update unexisting point');
+    }
+
+    try {
+      const response = await this.pointsApiService.updatePoint(update);
+      const updatedPoint = this.adaptToClient(response);
+      this.points = [...this.points.slice(0, index), updatedPoint, ...this.points.slice(index + 1)];
+      this._notify(updateType, updatedPoint);
+    } catch(err) {
+      throw new Error('Can\'t update point');
+    }
   }
 
-  generatePoints(){
-    return Array.from({length:POINT_COUNT},()=>{
-      const type = getRandomArrayElement(WAYPOINT_TYPE);
-      const destination = getRandomArrayElement(this.destinations);
-      const hasOffers = getRandomId (0,1);
-      const offersByType = this.offers
-        .find((offerByType)=>offerByType.type === type);
+  addPoint(updateType, update) {
+    this.points = [update, ...this.points];
 
-      const offerIds = (hasOffers)
-        ? offersByType.offers
-          .slice(0,getRandomId(0,OFFER_COUNT))
-          .map((offer)=>offer.id)
-        : [];
-      return generateMockPoints(type, destination.id, offerIds);
-    });
+    this._notify(updateType, update);
+  }
+
+  deletePoint(updateType, update) {
+    const index = this.points.findIndex((point) => point.id === update.id);
+
+    if (index === -1) {
+      throw new Error('Can\'t delete unexisting point');
+    }
+
+    this.points = [...this.points.slice(0, index), ...this.points.slice(index + 1)];
+
+    this._notify(updateType);
+  }
+
+  adaptToClient(point) {
+    const adaptedPoint = {
+      ...point,
+      basePrice: point['base_price'],
+      dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
+      dateTo: point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
+      isFavorite: point['is_favorite'],
+    };
+
+    delete adaptedPoint['base_price'];
+    delete adaptedPoint['date_from'];
+    delete adaptedPoint['date_to'];
+    delete adaptedPoint['is_favorite'];
+
+    return adaptedPoint;
   }
 }

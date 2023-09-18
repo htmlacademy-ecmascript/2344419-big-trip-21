@@ -88,7 +88,23 @@ const Mode = {
   EDITING:'EDITING',
 };
 
-export { Mode,
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',//малые изменения
+  MINOR: 'MINOR',//средние изменения
+  MAJOR: 'MAJOR',//большие изменения
+  INIT: 'INIT',
+};
+
+
+export { UpdateType,
+  UserAction,
+  Mode,
   sortType,
   enabledSortType,
   WAYPOINT_TYPE,

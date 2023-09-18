@@ -1,4 +1,6 @@
 import{formatSrtingToDateTime, CreateToUpperCase } from '../utils/utils.js';
+import he from 'he';
+
 
 function isFormValid(point) {
   return point.destination !== ''
@@ -89,15 +91,18 @@ function createFormTemplite({state,pointDestinations, pointOffers}){
           ${type}
           </label>
           <input class="event__input  event__input--destination"
-          id="event-destination-1" type="text" name="event-destination" value="${valueDestination}" list="destination-list-1">
+          id="event-destination-1" type="text" name="event-destination" value="${valueDestination}"
+          list="destination-list-1">
           ${createDatalistElement(pointDestinations)}
         </div>
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatSrtingToDateTime(dateFrom)}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text"
+           name="event-start-time" value="${formatSrtingToDateTime(dateFrom)}">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatSrtingToDateTime(dateTo)}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text"
+          name="event-end-time" value="${formatSrtingToDateTime(dateTo)}">
         </div>
         <div class="event__field-group  event__field-group--price">
           <label class="event__label" for="event-price-1">
@@ -105,7 +110,7 @@ function createFormTemplite({state,pointDestinations, pointOffers}){
             &euro;
           </label>
           <input class="event__input  event__input--price" id="event-price-1" type="text"
-           name="event-price" value="${basePrice}">
+           name="event-price" value="${he.encode(String(basePrice))}">
         </div>
         <button class="event__save-btn  btn  btn--blue" type="submit"
         ${isFormValid(point) ? '' : 'disabled'}
