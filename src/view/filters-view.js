@@ -1,9 +1,9 @@
 //фильтры
 import { createWayPointTemplite } from '../template/filters-template.js';
-import RadioListView from './radio-list-view.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 
-export default class FilterView extends RadioListView{
+export default class FilterView extends AbstractView{
   #filters = null;
   #currentFilter = null;
   #handleFilterTypeChange = null;

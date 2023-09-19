@@ -51,7 +51,7 @@ const FAVORIT = [
   false,
 ];
 
-const sortType = {
+const SortType = {
   DAY:'day',
   EVENT:'event',
   TIME:'time',
@@ -70,11 +70,11 @@ const BLANK_POINT = {
   type:'flight'
 };
 const enabledSortType = {
-  [sortType.DAY]: true,
-  [sortType.EVENT]: false,
-  [sortType.TIME]: true,
-  [sortType.PRICE]: true,
-  [sortType.OFFER]: false
+  [SortType.DAY]: true,
+  [SortType.EVENT]: false,
+  [SortType.TIME]: true,
+  [SortType.PRICE]: true,
+  [SortType.OFFER]: false
 };
 
 const FilterType = {
@@ -105,7 +105,7 @@ const UpdateType = {
 export { UpdateType,
   UserAction,
   Mode,
-  sortType,
+  SortType,
   enabledSortType,
   WAYPOINT_TYPE,
   CITIES_NAMES,

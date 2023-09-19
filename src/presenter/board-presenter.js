@@ -4,7 +4,7 @@ import NoPointView from '../view/no-point-view.js';//заглушка
 import LoadingView from '../view/loading-view.js';//загрузка
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
-import { sortType, FilterType, UpdateType, UserAction } from '../const.js';
+import { SortType, FilterType, UpdateType, UserAction } from '../const.js';
 import { remove, render, replace } from '../framework/render.js';
 import {filter} from '../utils/utils-filter.js';
 import { getPointsDateDifference, getPointsTimeDifference, getPointsPriceDifference} from '../utils/utils-sort.js';
@@ -22,7 +22,7 @@ export default class BoardPresenter {
   #noPointComponent = null;
   #loadingComponent = new LoadingView();
 
-  #currentSortType = sortType.DAY;
+  #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
 
   #pointPresenters = new Map();//ассоциативный массив
@@ -55,11 +55,11 @@ export default class BoardPresenter {
     const filteredPoints = filter[this.#filterType](points);//фильтрация
 
     switch (this.#currentSortType) {
-      case sortType.DAY:
+      case SortType.DAY:
         return filteredPoints.toSorted(getPointsDateDifference);
-      case sortType.TIME:
+      case SortType.TIME:
         return filteredPoints.toSorted(getPointsTimeDifference);
-      case sortType.PRICE:
+      case SortType.PRICE:
         return filteredPoints.toSorted(getPointsPriceDifference);
     }
 
@@ -72,7 +72,7 @@ export default class BoardPresenter {
   }
 
   createPoint() {//создание точки
-    this.#currentSortType = sortType.DAY;
+    this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init();
   }
@@ -168,9 +168,11 @@ export default class BoardPresenter {
     }
 
     this.#renderSort();
-    this.#renderPointContainer();
-    if (this.points.length === 0){
-      render(this.#renderNoPoint, this.#container);//заглушка
+    render(this.#eventListComponent, this.#container);
+
+    if (this.points.length === 0) {
+      this.#renderNoPoint();
+      return;
     }
     this.#renderPoints();
   };
@@ -185,13 +187,8 @@ export default class BoardPresenter {
       remove(this.#noPointComponent);
     }
     if (resetSortType) {
-      this.#currentSortType = sortType.DAY;
+      this.#currentSortType = SortType.DAY;
     }
-  };
-
-  #renderPointContainer = () => {
-    this.#eventListComponent = new EventListView();
-    render(this.#eventListComponent,this.#container);
   };
 
   #renderNoPoint = () => {//отрисовка при отсутствии точек

@@ -38,7 +38,7 @@ export default class MockService extends Observable{
     this._notify(UpdateType.INIT, this.points);
   }
 
-  async updatePoint(updateType, update) {
+  async updatePoint(updateType, update) {//изменение
     const index = this.points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
@@ -55,13 +55,13 @@ export default class MockService extends Observable{
     }
   }
 
-  addPoint(updateType, update) {
+  addPoint(updateType, update) {//добавление
     this.points = [update, ...this.points];
 
     this._notify(updateType, update);
   }
 
-  deletePoint(updateType, update) {
+  deletePoint(updateType, update) {//удаление
     const index = this.points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
