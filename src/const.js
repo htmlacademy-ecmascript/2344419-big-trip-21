@@ -51,7 +51,7 @@ const FAVORIT = [
   false,
 ];
 
-const sortType = {
+const SortType = {
   DAY:'day',
   EVENT:'event',
   TIME:'time',
@@ -70,11 +70,11 @@ const BLANK_POINT = {
   type:'flight'
 };
 const enabledSortType = {
-  [sortType.DAY]: true,
-  [sortType.EVENT]: false,
-  [sortType.TIME]: true,
-  [sortType.PRICE]: true,
-  [sortType.OFFER]: false
+  [SortType.DAY]: true,
+  [SortType.EVENT]: false,
+  [SortType.TIME]: true,
+  [SortType.PRICE]: true,
+  [SortType.OFFER]: false
 };
 
 const FilterType = {
@@ -88,8 +88,24 @@ const Mode = {
   EDITING:'EDITING',
 };
 
-export { Mode,
-  sortType,
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',//малые изменения
+  MINOR: 'MINOR',//средние изменения
+  MAJOR: 'MAJOR',//большие изменения
+  INIT: 'INIT',
+};
+
+
+export { UpdateType,
+  UserAction,
+  Mode,
+  SortType,
   enabledSortType,
   WAYPOINT_TYPE,
   CITIES_NAMES,

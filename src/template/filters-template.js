@@ -1,6 +1,9 @@
+function capitalize(string) {
+  return `${string[0].toUpperCase()}${string.slice(1)}`;
+}
 
-function getFilterItem(filter, isCheked, isDisabled){
-  const {type,count} = filter;
+function getFilterItem(filter, currentFilterType){
+  const {type} = filter;
   return (`<div class="trip-filters__filter">
   <input
   id="filter-${type}"
@@ -8,16 +11,14 @@ function getFilterItem(filter, isCheked, isDisabled){
   type="radio"
   data-item="${type}"
   name="trip-filter"
-  ${(isCheked) ? 'checked' : ''}
-  ${(isDisabled) ? 'disabled' : ''}
-  value="${type}">
+  value="${type}" ${type === currentFilterType ? 'checked="true"' : ''}}>
   <label class="trip-filters__filter-label"
-  for="filter-${type}">${type}</label>
+  for="filter-${type}">${capitalize(type)}</label>
   </div>
   `);
 }
-function createWayPointTemplite(filterItems){
-  const filterItemsTemplate = filterItems.map((filter) => getFilterItem(filter)).join('');
+function createWayPointTemplite(filterItems, currentFilterType){
+  const filterItemsTemplate = filterItems.map((filter) => getFilterItem(filter, currentFilterType)).join('');
   return `
     <form class="trip-filters" action="#" method="get">
         ${filterItemsTemplate}

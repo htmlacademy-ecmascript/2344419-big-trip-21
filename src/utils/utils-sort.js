@@ -1,4 +1,4 @@
-import { sortType } from '../const.js';
+import { SortType } from '../const.js';
 import dayjs from 'dayjs';
 
 const getPointsDateDifference = (pointA, pointB) => dayjs(pointB.dateFrom).diff(dayjs(pointA.dateFrom));
@@ -15,15 +15,18 @@ const getPointsTimeDifference = (pointA, pointB) =>{
 };
 
 const sort = {
-  [sortType.DAY]:(points) => points.toSorted(getPointsDateDifference),
-  [sortType.PRICE]:(points) => points.toSorted(getPointsPriceDifference),
-  [sortType.TIME]:(points) => points.toSorted(getPointsTimeDifference),
-  [sortType.EVENT]:()=>{
-    throw new Error(`Sort by ${sortType.EVENT} is not implemented`);
+  [SortType.DAY]:(points) => points.toSorted(getPointsDateDifference),
+  [SortType.PRICE]:(points) => points.toSorted(getPointsPriceDifference),
+  [SortType.TIME]:(points) => points.toSorted(getPointsTimeDifference),
+  [SortType.EVENT]:()=>{
+    throw new Error(`Sort by ${SortType.EVENT} is not implemented`);
   },
-  [sortType.OFFER]:()=>{
-    throw new Error(`Sort by ${sortType.OFFER} is not implemented`);
+  [SortType.OFFER]:()=>{
+    throw new Error(`Sort by ${SortType.OFFER} is not implemented`);
   }
 };
 
-export {sort};
+function isDateEqual(dateA, dateB) {
+  return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
+}
+export {sort, getPointsDateDifference, getPointsPriceDifference, getPointsTimeDifference, isDateEqual };

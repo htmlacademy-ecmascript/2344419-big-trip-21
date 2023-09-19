@@ -6,7 +6,7 @@ function getSortItem({type, isChecked, isDisabled}){
   class="trip-sort__input  visually-hidden"
   type="radio" name="trip-sort"
   value="sort-${type}"
-  data-item="${type}"
+  data-sort-items="${type}"
   ${(isChecked) ? 'checked' : ''}
   ${(isDisabled) ? 'disabled' : ''}
    >
@@ -18,7 +18,7 @@ function getSortItem({type, isChecked, isDisabled}){
 
 function createSortingTemplite(sortItems) {
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-  ${sortItems.map((sortItem)=>getSortItem(sortItem)).join('')}
+  ${sortItems.map((item)=>getSortItem(item)).join('')}
 </form>`;
 }
 export {createSortingTemplite};

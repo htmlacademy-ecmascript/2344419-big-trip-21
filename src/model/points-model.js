@@ -1,11 +1,14 @@
-export default class PointsModel {
-  #points;
-  constructor(service){
-    this.service = service;
-    this.#points = this.service.getPoints();
+import Observable from '../framework/observable.js';
+
+export default class PointsModel extends Observable {
+  #service = null;
+
+  constructor(service) {
+    super();
+    this.#service = service;
   }
 
-  get (){
-    return this.#points;
+  get points() {
+    return this.#service.getPoints();
   }
 }
