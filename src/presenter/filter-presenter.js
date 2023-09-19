@@ -50,8 +50,7 @@ export default class FilterPresenter {
     if (this.#filterModel.filter === filterType) {
       return;
     }
-
-    this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this.#filterModel.set(UpdateType.MAJOR, filterType);
   };
 
   #handleModelEvent = () => {

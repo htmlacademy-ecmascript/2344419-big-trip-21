@@ -72,6 +72,10 @@ const getDate = ({next}) => {//формируем дату
   return date;
 };
 
+function updateItem(items,update){
+  return items.map((item) => item.id === update.id ? update : item);
+}
+
 export{ getRandomArrayElement,
   getRandomId,
   getDate,
@@ -80,4 +84,5 @@ export{ getRandomArrayElement,
   formatStringToTime,
   capitalize,
   getPointDuration,
-  CreateToUpperCase };
+  CreateToUpperCase,
+  updateItem};

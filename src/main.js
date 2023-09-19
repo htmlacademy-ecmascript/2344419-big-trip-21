@@ -1,7 +1,7 @@
 
 import NewInfoView from './view/info-container-view.js';
 import BoardPresenter from './presenter/board-presenter.js';
-import NewPointButtonView from './view/new-point-button-view.js';
+import NewPointButtonPresenter from './presenter/new-point-button-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 
 import PointModel from './model/points-model.js';
@@ -29,6 +29,9 @@ const destinationsModel = new DestinationsModel(mockService);
 const offersModel = new OffersModel(mockService);
 const pointModel = new PointModel(mockService);
 const filterModel = new FilterModel();
+const newPointButtonPresenter = new NewPointButtonPresenter({
+  container:tripInfoElement,
+});
 
 
 const boardPresenter = new BoardPresenter({
@@ -37,7 +40,7 @@ const boardPresenter = new BoardPresenter({
   offersModel,
   pointModel,
   filterModel,
-  onNewPointDestroy: handleNewPointFormClose,
+  newPointButtonPresenter: NewPointButtonPresenter
 });
 
 const filterPresenter = new FilterPresenter({
@@ -46,24 +49,14 @@ const filterPresenter = new FilterPresenter({
   pointModel,
 });
 
-const newPointButtonComponent = new NewPointButtonView({
-  onClick: handleNewPointButtonClick
-});
-
-function handleNewPointFormClose() {
-  newPointButtonComponent.element.disabled = false;
-}
-
-function handleNewPointButtonClick() {
-  boardPresenter.createPoint();
-  newPointButtonComponent.element.disabled = true;
-}
 
 render(new NewInfoView(), tripInfoElement, RenderPosition.AFTERBEGIN);
-render(newPointButtonComponent,tripInfoElement);
-
-filterPresenter.init();
-boardPresenter.init();
-mockService.init().finally(() => {
-  render(newPointButtonComponent, tripInfoElement);
+newPointButtonPresenter.init({
+  onButtonClick:boardPresenter.newPointButtonClickHandler
 });
+
+boardPresenter.init();
+filterPresenter.init();
+//mockService.init().finally(() => {
+//  render(newPointButtonComponent, tripInfoElement);
+//});
