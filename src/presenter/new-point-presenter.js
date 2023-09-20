@@ -27,8 +27,8 @@ export default class NewPointPresenter {
 
     this.#pointEditComponent = new CreateFormView({
       pointTypes: WAYPOINT_TYPE,
-      destinations: this.#destinationModel.destinations,
-      offers: this.#offersModel.offers,
+      pointDestinations: this.#destinationModel.destinations,
+      pointOffers: this.#offersModel.offers,
       onFormSubmit: this.#handleFormSubmit,
       onCancelClick: this.#handleCancelClick,
     });

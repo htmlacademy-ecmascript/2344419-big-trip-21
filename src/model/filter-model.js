@@ -4,7 +4,7 @@ import { FilterType } from '../const';
 export default class FilterModel extends Observable {
   #filter = FilterType.EVERYTHING;
 
-  get() {
+  get filter() {
     return this.#filter;//возв текущий фильтр
   }
 
