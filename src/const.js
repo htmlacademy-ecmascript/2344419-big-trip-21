@@ -52,11 +52,11 @@ const FAVORIT = [
 ];
 
 const SortType = {
-  DAY:'day',
-  EVENT:'event',
-  TIME:'time',
-  PRICE:'price',
-  OFFER:'offer',
+  DAY:'DAY',
+  EVENT:'EVENT',
+  TIME:'TIME',
+  PRICE:'PRICE',
+  OFFER:'OFFER',
 };
 
 const BLANK_POINT = {

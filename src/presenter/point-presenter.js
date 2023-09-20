@@ -32,7 +32,7 @@ export default class PointPresenter{
 
     this.#pointComponent = new WayPointView({//создаем точку
       point:this.#point,
-      pointDestination: this.#destinationsModel.pointDestinations,
+      pointDestination: this.#destinationsModel.destination,
       pointOffers: this.#offersModel.offers,
       onEditClick: this.#handleEditClick,//стрелка
       onFavoriteClick:this.#handlefavoriteClick,//звезда
@@ -40,8 +40,8 @@ export default class PointPresenter{
     this.#pointEditComponent = new CreateFormView({//форма редактирования
       point:this.#point,
       pointTypes: WAYPOINT_TYPE,
-      pointDestinations: this.#destinationsModel.get(),
-      pointOffers: this.#offersModel.get(),
+      pointDestinations: this.#destinationsModel.destination,
+      pointOffers: this.#offersModel.offers,
       onFormSubmit:this.#handleFormSubmit,//сохранение
       onArrowUpClick:this.#handleArrowUpClick,//переключение стрелка
       onDeleteClick:this.#handleDeleteClick,//удаление

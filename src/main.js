@@ -13,7 +13,7 @@ import FilterModel from './model/filter-model.js';
 import { render , RenderPosition} from './framework/render.js';
 import PointsApiService from './mock/points-api-service.js';
 
-const AUTHORIZATION = 'Basic khkJ34dt777nj5343xcFkhd';
+const AUTHORIZATION = 'Basic eo0w590ik19889b';
 const END_POINT = 'https://21.objects.pages.academy/big-trip';
 
 const body = document.querySelector('body');//боди
@@ -24,6 +24,7 @@ const eventListElement = siteMainElement.querySelector('.trip-events');//сек�
 const filtersElement = header.querySelector('.trip-controls__filters');//фильтры
 
 const pointsApiService = new PointsApiService(END_POINT, AUTHORIZATION);
+
 const mockService = new MockService({pointsApiService});
 const destinationsModel = new DestinationsModel(mockService);
 const offersModel = new OffersModel(mockService);

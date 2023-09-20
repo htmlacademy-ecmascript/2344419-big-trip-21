@@ -1,4 +1,4 @@
-function getSortItem({type, isChecked, isDisabled}){
+function getSortItem(type, isChecked){
   return `
   <div class="trip-sort__item trip-sort__item--${type}">
   <input
@@ -8,7 +8,7 @@ function getSortItem({type, isChecked, isDisabled}){
   value="sort-${type}"
   data-sort-items="${type}"
   ${(isChecked) ? 'checked' : ''}
-  ${(isDisabled) ? 'disabled' : ''}
+  if(data-sort-items="EVENT") ? 'disabled'}
    >
   <label class="trip-sort__btn"
  for="sort-${type}">${type}</label>

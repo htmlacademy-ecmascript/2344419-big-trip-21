@@ -124,15 +124,15 @@ export default class BoardPresenter {
     }
     this.#currentSortType = item;//сортируем
     this.#clearPoints();//очищаем
-    this.#renderSort();//рендерим сортировку
+    // this.#renderSort();//рендерим сортировку
     this.#renderPoints();//рендерим список заново
   };
 
   #renderSort = () => {//отрисовка сортировки
     const prevSortComponent = this.#sortComponent;
     this.#sortComponent = new SortingView({
-      currentSortType: this.#currentSortType,
-      onSortTypeChange: this.#handleSortTypeChange,
+      items: Array.from(Object.keys(SortType)),
+      onItemChange: this.#handleSortTypeChange,
     });
     if (prevSortComponent === null) {
       render(this.#sortComponent, this.#container);

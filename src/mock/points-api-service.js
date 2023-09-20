@@ -6,6 +6,16 @@ const Method = {
 };
 
 export default class PointsApiService extends ApiService {
+
+  _endPoint = '';
+  _authorization = '';
+
+  constructor(endPoint, authorization) {
+    super();
+    this._endPoint = endPoint;
+    this._authorization = authorization;
+  }
+
   get points() {
     return this._load({url: 'points'}).then(ApiService.parseResponse);
   }
