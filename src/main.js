@@ -4,14 +4,14 @@ import BoardPresenter from './presenter/board-presenter.js';
 import NewPointButtonView from './view/new-point-button-view.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 
-import PointModel from './model/points-model.js';
-import MockService from './mock/service-mock.js';
+import MockService from './service/service.js';
 import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
 import FilterModel from './model/filter-model.js';
 
 import { render , RenderPosition} from './framework/render.js';
-import PointsApiService from './mock/points-api-service.js';
+import PointsApiService from './service/points-api-service.js';
+import PointsModel from './model/points-model.js';
 
 const AUTHORIZATION = 'Basic eo0w590ik19889b';
 const END_POINT = 'https://21.objects.pages.academy/big-trip';
@@ -28,7 +28,7 @@ const pointsApiService = new PointsApiService(END_POINT, AUTHORIZATION);
 const mockService = new MockService({pointsApiService});
 const destinationsModel = new DestinationsModel(mockService);
 const offersModel = new OffersModel(mockService);
-const pointModel = new PointModel(mockService);
+const pointModel = new PointsModel(mockService);
 const filterModel = new FilterModel();
 
 const boardPresenter = new BoardPresenter({

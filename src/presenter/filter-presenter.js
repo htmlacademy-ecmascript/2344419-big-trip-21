@@ -23,7 +23,7 @@ export default class FilterPresenter {
 
     return Object.values(FilterType).map((type) => ({
       type,
-      count: filter[type](points).length
+      count: points ? filter[type](points).length : 0,
     }));
   }
 
@@ -50,7 +50,7 @@ export default class FilterPresenter {
     if (this.#filterModel.filter === filterType) {
       return;
     }
-    this.#filterModel.set(UpdateType.MAJOR, filterType);
+    this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
   };
 
   #handleModelEvent = () => {

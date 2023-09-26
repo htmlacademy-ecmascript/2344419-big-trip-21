@@ -12,7 +12,6 @@ const HOUR_IN_DAY = 24;
 const MSEC_IN_HOUR = MIN_IN_HOUR * SEC_IN_MIN * MSEC_IN_SEC;//сек в часе
 const MSEC_IN_DAY = HOUR_IN_DAY * MSEC_IN_HOUR;//сек в дне
 
-const getRandomArrayElement = (items) => items[Math.floor(Math.random() * items.length)];//случайное число из массива
 const getRandomId = (min,max) => Math.floor(min + Math.random() * (max + 1 - min));//рандом из мин/макс
 
 const DATE_FORMAT = {
@@ -76,7 +75,7 @@ function updateItem(items,update){
   return items.map((item) => item.id === update.id ? update : item);
 }
 
-export{ getRandomArrayElement,
+export{
   getRandomId,
   getDate,
   FormatStringToShortDate,
