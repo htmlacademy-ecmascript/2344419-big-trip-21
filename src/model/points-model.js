@@ -11,4 +11,16 @@ export default class PointsModel extends Observable {
   get points() {
     return this.#service.getPoints();
   }
+
+  async addPoint(updateType, update) {
+    await this.#service.addPoint(updateType, update);
+  }
+
+  async updatePoint(updateType, update) {
+    await this.#service.updatePoint(updateType, update);
+  }
+
+  async deletePoint(updateType, update) {
+    await this.#service.deletePoint(updateType, update);
+  }
 }

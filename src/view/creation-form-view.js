@@ -28,10 +28,12 @@ export default class CreateFormView extends AbstractStatefulView{
   }
 
   get template(){
+    const isEditForm = this.#handleDeleteClick;
     return createFormTemplite({
       state: this._state,
       pointDestinations: this.#pointDestinations,
       pointOffers:this.#pointOffers,
+      isEditForm
     });
   }
 
@@ -48,33 +50,43 @@ export default class CreateFormView extends AbstractStatefulView{
   }
 
   reset(point){
-    this.updateElement({point});
+    this.updateElement(CreateFormView.parsePointToState(point));
   }
 
   _restoreHandlers = () =>{
+    const availableOffersElement = this.element.querySelector('.event__available-offers');
+    const resetButtonElement = this.element.querySelector('.event__reset-btn');
+
     this.element.querySelector('form')//кнопка сохранения
       .addEventListener('submit',this.#formSubmitHandler);
-    this.element.querySelector('.event__rollup-btn')//стрелка
-      .addEventListener('click',this.#formArrowUpHandler);
-    this.element.querySelector('.event__reset-btn')
-      .addEventListener('click', this.#deleteClickHandler);//удалить
+    this.element.querySelector('.event__input--price')
+      .addEventListener('change',this.#priceChangeHandler);//изменить цену
     this.element.querySelector('.event__type-group')
       .addEventListener('change',this.#typeChangeHandler);//сменить тип точки
     this.element.querySelector('.event__input--destination')
-      .addEventListener('change',this.#destinationChangeHandler);//сменить направление
-    this.element.querySelector('.event__available-offers')
-      .addEventListener('change',this.#offersChangeHandler);//выбрать офферы
-    this.element.querySelector('.event__input--price')
-      .addEventListener('change',this.#priceChangeHandler);//изменить цену
+      .addEventListener('change',this.#destinationChangeHandler);//сменить направлени
+
+    if (availableOffersElement) {
+      availableOffersElement.addEventListener('click', this.#offersChangeHandler);
+    }
+
+    if (this.#handleDeleteClick) {
+      this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formArrowUpHandler);
+      resetButtonElement.addEventListener('click', this.#deleteClickHandler);
+    } else {
+      resetButtonElement.addEventListener('click', this.#formSubmitHandler);
+    }
+
     this.#setDatepickers();
   };
 
 
   #typeChangeHandler = (evt) =>{//перерисовка оферов по выбранному типу
+    evt.preventDefault();
     this.updateElement({
       point:{
         ...this._state.point,
-        type:evt.target.value,
+        newPointType:evt.target.value,
         offers:[]
       }
     });
@@ -92,13 +104,30 @@ export default class CreateFormView extends AbstractStatefulView{
     });
   };
 
-  #offersChangeHandler = () =>{
-    const checkedBoxes = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
-    this._setState({
-      point:{
-        ...this._state.point,
-        offers:checkedBoxes.map((element) => element.dataset.offerId)
+  #offersChangeHandler = (evt) => {
+    evt.preventDefault();
+    if (!evt.target.closest('.event__offer-selector')) {
+      return;
+    }
+
+    const clickedOfferElement = evt.target.closest('.event__offer-selector').querySelector('input');
+    const clickedOfferId = clickedOfferElement.dataset.offerId;
+    let selectedOffers = this._state.offers;
+
+    evt.target.closest('.event__offer-selector').querySelector('input').toggleAttribute('checked');
+
+    if (clickedOfferElement.checked) {
+      selectedOffers.push(clickedOfferId);
+    } else {
+      if (selectedOffers.length === 1) {
+        selectedOffers = [];
+      } else {
+        selectedOffers = selectedOffers.filter((id) => id !== clickedOfferId);
       }
+    }
+
+    this.updateElement({
+      offers: selectedOffers,
     });
   };
 
@@ -171,10 +200,36 @@ export default class CreateFormView extends AbstractStatefulView{
 
   #deleteClickHandler = (evt) =>{
     evt.preventDefault();
-    this.#handleDeleteClick();//удаление
+    this.#handleDeleteClick(this._state.point);//удаление
   };
 
-  static parsePointToState = ({point}) =>({point});
+  static parsePointToState(point){
+    return{
+      point,
+      newPointType: false,
+      newDestination: false,
+      isDisabled : false,
+      isSaving : false,
+      isDeletind : false,};
+  }
 
-  static parseStateToPint = (state) => state.point;
+  static parseStateToPint = (state) => {
+    const point = {...state};
+
+    if (point.newPointType !== false) {
+      point.type = point.newPointType;
+    }
+
+    if (point.newDestination !== false) {
+      point.destination = point.newDestination;
+    }
+
+    delete point.newPointType;
+    delete point.newDestination;
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
+
+    return point;
+  };
 }

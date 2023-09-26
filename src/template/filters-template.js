@@ -3,7 +3,7 @@ function capitalize(string) {
 }
 
 function getFilterItem(filter, currentFilterType){
-  const {type} = filter;
+  const {type,count} = filter;
   return (`<div class="trip-filters__filter">
   <input
   id="filter-${type}"
@@ -11,7 +11,7 @@ function getFilterItem(filter, currentFilterType){
   type="radio"
   data-item="${type}"
   name="trip-filter"
-  value="${type}" ${type === currentFilterType ? 'checked="true"' : ''}}>
+  value="${type}" ${type === currentFilterType ? 'checked="true"' : ''} ${count === 0 ? 'disabled' : ''}>
   <label class="trip-filters__filter-label"
   for="filter-${type}">${capitalize(type)}</label>
   </div>
