@@ -1,4 +1,6 @@
-function getSortItem(type, isChecked){
+import { SortType } from '../const.js';
+
+function getSortItem(type, isChecked) {
   return `
   <div class="trip-sort__item trip-sort__item--${type}">
   <input
@@ -8,7 +10,7 @@ function getSortItem(type, isChecked){
   value="sort-${type}"
   data-sort-items="${type}"
   ${(isChecked) ? 'checked' : ''}
-  if(data-sort-items="EVENT") ? 'disabled'}
+  ${type === SortType.EVENT || type === SortType.OFFER ? 'disabled' : ''}
    >
   <label class="trip-sort__btn"
  for="sort-${type}">${type}</label>
@@ -18,7 +20,7 @@ function getSortItem(type, isChecked){
 
 function createSortingTemplite(sortItems) {
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-  ${sortItems.map((item)=>getSortItem(item)).join('')}
+  ${sortItems.map((item) => getSortItem(item)).join('')}
 </form>`;
 }
-export {createSortingTemplite};
+export { createSortingTemplite };

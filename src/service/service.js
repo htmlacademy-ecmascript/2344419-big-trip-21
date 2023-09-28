@@ -38,7 +38,7 @@ export default class MockService extends Observable{
     this._notify(UpdateType.INIT, this.points);
   }
 
-  async updatePoint(updateType, update) {//изменение
+  async updatePoint(updateType, update) {
     const index = this.points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
@@ -55,7 +55,7 @@ export default class MockService extends Observable{
     }
   }
 
-  async addPoint(updateType, update) {//добавление
+  async addPoint(updateType, update) {
     try{
       const response = await this.pointsApiService.addPoint(update);
       const newPoint = this.adaptToClient(response);
@@ -66,11 +66,11 @@ export default class MockService extends Observable{
     }
   }
 
-  async deletePoint(updateType, update) {//удаление
+  async deletePoint(updateType, update) {
     const index = this.points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
-      throw new Error('Can\'t delete point');
+      throw new Error('Can\'t delete unexisting point');
     }
 
     try{

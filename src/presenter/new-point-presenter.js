@@ -1,20 +1,19 @@
 import { remove, render, RenderPosition } from '../framework/render.js';
 import CreateFormView from '../view/creation-form-view.js';
-import {UserAction, UpdateType, WAYPOINT_TYPE} from '../const.js';
+import { UserAction, UpdateType, WAYPOINT_TYPE } from '../const.js';
 
 
 export default class NewPointPresenter {
-  #pointListContainer = null;
+  #container = null;
   #destinationModel = null;
   #offersModel = null;
   #handleDataChange = null;
   #handleEditFormClose = null;
   #handleDestroy = null;
-
   #pointEditComponent = null;
 
-  constructor({pointListContainer, destinationModel, offersModel, onDataChange, onDestroy, onEditFormClose}) {
-    this.#pointListContainer = pointListContainer;
+  constructor({ container, destinationModel, offersModel, onDataChange, onDestroy, onEditFormClose }) {
+    this.#container = container;
     this.#destinationModel = destinationModel;
     this.#offersModel = offersModel;
     this.#handleDataChange = onDataChange;
@@ -34,7 +33,7 @@ export default class NewPointPresenter {
       onFormSubmit: this.#handleFormSubmit,
       onCancelClick: this.#handleCancelClick,
     });
-    render(this.#pointEditComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
+    render(this.#pointEditComponent, this.#container, RenderPosition.AFTERBEGIN);
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 

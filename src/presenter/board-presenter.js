@@ -1,14 +1,14 @@
-import SortingView from '../view/sorting-view.js';//сортировка
-import EventListView from '../view/event-list-view.js';//список
-import NoPointView from '../view/no-point-view.js';//заглушка
-import LoadingView from '../view/loading-view.js';//загрузка
+import SortingView from '../view/sorting-view.js';
+import EventListView from '../view/event-list-view.js';
+import NoPointView from '../view/no-point-view.js';
+import LoadingView from '../view/loading-view.js';
 import PointPresenter from './point-presenter.js';
 import FilterPresenter from './filter-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import { SortType, FilterType, UpdateType, UserAction, TimeLimit } from '../const.js';
 import { remove, render, replace } from '../framework/render.js';
-import {filter} from '../utils/utils-filter.js';
-import { getPointsDateDifference, getPointsTimeDifference, getPointsPriceDifference} from '../utils/utils-sort.js';
+import { filter } from '../utils/utils-filter.js';
+import { getPointsDateDifference, getPointsTimeDifference, getPointsPriceDifference } from '../utils/utils-sort.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 
@@ -21,12 +21,13 @@ export default class BoardPresenter {
   #mockService = null;
   #sortComponent = null;
   #newFilterPresenter = null;
+  #newPointPresenter = null;
   #eventListComponent = new EventListView();
   #noPointComponent = null;
   #loadingComponent = new LoadingView();
   #uiBlocker = new UiBlocker({
-    lowerLimit:TimeLimit.LOWER_LIMIT,
-    upperLimit:TimeLimit.UPPER_LIMIT
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
   });
 
   __isMessageRemoved = false;
@@ -38,10 +39,9 @@ export default class BoardPresenter {
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
 
-  #pointPresenters = new Map();//ассоциативный массив
-  #newPointPresenter = null;
+  #pointPresenters = new Map();
 
-  constructor({container, pointModel, offersModel, filterModel, destinationsModel, mockService, onNewPointButtonDisable, onNewPointButtonUnblock}){
+  constructor({ container, pointModel, offersModel, filterModel, destinationsModel, mockService, onNewPointButtonDisable, onNewPointButtonUnblock }) {
     this.#container = container;
     this.#pointModel = pointModel;
     this.#offersModel = offersModel;
@@ -55,7 +55,7 @@ export default class BoardPresenter {
     render(this.#eventListComponent, this.#container);
 
     this.#newPointPresenter = new NewPointPresenter({
-      pointListContainer: this.#eventListComponent.element,
+      container: this.#eventListComponent.element,
       destinationModel: this.#destinationsModel,
       offersModel: this.#offersModel,
       onDataChange: this.#handleViewAction,
@@ -74,10 +74,13 @@ export default class BoardPresenter {
     this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
-  get points(){
+  get points() {
     const points = this.#pointModel.points;
+    if (!points) {
+      return null;
+    }
     this.#filterType = this.#filterModel.filter;
-    const filteredPoints = filter[this.#filterType](points);//фильтрация
+    const filteredPoints = filter[this.#filterType](points);
 
     switch (this.#currentSortType) {
       case SortType.DAY:
@@ -96,7 +99,7 @@ export default class BoardPresenter {
     this.#renderBoard();
   }
 
-  createPoint() {//создание точки
+  createPoint() {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init();
@@ -116,30 +119,30 @@ export default class BoardPresenter {
   #handleViewAction = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
     switch (actionType) {
-      case UserAction.UPDATE_POINT://изменение
-        this.#pointPresenters.get(update.id).setSaving();
-        try{
-          await this.#mockService.updatePoint(updateType, update);
-        } catch{
-          this.#pointPresenters.get(update.id).setAborting();
+      case UserAction.UPDATE_POINT:
+        this.#pointPresenters.get(update.point.id).setSaving();
+        try {
+          await this.#pointModel.updatePoint(updateType, update.point);
+        } catch (err) {
+          this.#pointPresenters.get(update.point.id).setAborting();
         }
         break;
 
-      case UserAction.ADD_POINT://добавление
-        this.#pointPresenters.setSaving();
-        try{
-          await this.#mockService.addPoint(updateType, update);
-        } catch{
-          this.#pointPresenters.setAborting();
+      case UserAction.ADD_POINT:
+        this.#newPointPresenter.setSaving();
+        try {
+          await this.#pointModel.addPoint(updateType, update.point);
+        } catch (err) {
+          this.#newPointPresenter.setAborting();
         }
         break;
 
-      case UserAction.DELETE_POINT://удаление
-        this.#pointPresenters.get(update.id).setDeleting();
-        try{
-          await this.#mockService.deletePoint(updateType, update);
-        } catch {
-          this.#pointPresenters.get(update.id).setAborting();
+      case UserAction.DELETE_POINT:
+        this.#pointPresenters.get(update.point.id).setDeleting();
+        try {
+          await this.#pointModel.deletePoint(updateType, update.point);
+        } catch (err) {
+          this.#pointPresenters.get(update.point.id).setAborting();
         }
         break;
     }
@@ -156,7 +159,7 @@ export default class BoardPresenter {
         this.#renderBoard();
         break;
       case UpdateType.MAJOR:
-        this.#clearPoints({resetSortType: true});
+        this.#clearPoints({ resetSortType: true });
         this.#renderBoard();
         break;
       case UpdateType.INIT:
@@ -167,23 +170,23 @@ export default class BoardPresenter {
     }
   };
 
-  #handleModeChange = () =>{//закрываем форму при открытии другой
+  #handleModeChange = () => {
     this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
 
-  #handleSortTypeChange = (item)=>{
+  #handleSortTypeChange = (item) => {
     if (this.#currentSortType === item) {
       return;
     }
-    this.#currentSortType = item;//сортируем
-    this.#clearPoints();//очищаем
-    this.#renderSort();//рендерим сортировку
-    this.#renderPoints();//рендерим список заново
+    this.#currentSortType = item;
+    this.#clearPoints();
+    this.#renderSort();
+    this.#renderPoints();
   };
 
-  #renderSort = () => {//отрисовка сортировки
+  #renderSort = () => {
     const prevSortComponent = this.#sortComponent;
     this.#sortComponent = new SortingView({
       items: Array.from(Object.keys(SortType)),
@@ -196,7 +199,7 @@ export default class BoardPresenter {
     replace(this.#sortComponent, prevSortComponent);
   };
 
-  #renderPoints = () => {//отрисовка коллекции точек
+  #renderPoints = () => {
     this.points.forEach((point) => this.#renderPoint(point));
   };
 
@@ -204,11 +207,11 @@ export default class BoardPresenter {
     render(this.#loadingComponent, this.#container);
   };
 
-  #renderPoint = (point) => {//отрисовка  одной точки
+  #renderPoint = (point) => {
     const pointPresenter = new PointPresenter({
-      container:this.#eventListComponent.element,
-      destinationsModel:this.#destinationsModel,
-      offersModel:this.#offersModel,
+      container: this.#eventListComponent.element,
+      destinationsModel: this.#destinationsModel,
+      offersModel: this.#offersModel,
       onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange,
     });
@@ -237,9 +240,9 @@ export default class BoardPresenter {
   };
 
 
-  #clearPoints = ({resetSortType = false} = {}) =>{//удаление точек
+  #clearPoints = ({ resetSortType = false } = {}) => {
     this.#newPointPresenter.destroy();
-    this.#pointPresenters.forEach((presenter)=>presenter.destroy());
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
     remove(this.#loadingComponent);
     if (this.#noPointComponent) {
@@ -250,12 +253,12 @@ export default class BoardPresenter {
     }
   };
 
-  #renderNoPoint = (isServerAvailable) => {//отрисовка при отсутствии точек
+  #renderNoPoint = (isServerAvailable) => {
     this.#noPointComponent = new NoPointView({
       filterType: this.#filterType,
       isServerAvailable
     });
-    if(isServerAvailable){
+    if (isServerAvailable) {
       this.#handleNewPointButtonDisable();
     }
     render(this.#noPointComponent, this.#container);

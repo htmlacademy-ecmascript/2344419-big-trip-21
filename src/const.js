@@ -26,11 +26,11 @@ const POINT_EMPTY = {
 
 
 const SortType = {
-  DAY:'DAY',
-  EVENT:'EVENT',
-  TIME:'TIME',
-  PRICE:'PRICE',
-  OFFER:'OFFER',
+  DAY: 'DAY',
+  EVENT: 'EVENT',
+  TIME: 'TIME',
+  PRICE: 'PRICE',
+  OFFER: 'OFFER',
 };
 
 const BLANK_POINT = {
@@ -41,7 +41,7 @@ const BLANK_POINT = {
   destination: null,
   isFavorite: false,
   offers: [],
-  type:'flight'
+  type: 'flight'
 };
 const enabledSortType = {
   [SortType.DAY]: true,
@@ -53,13 +53,14 @@ const enabledSortType = {
 
 const FilterType = {
   EVERYTHING: 'everything',//все
-  FUTURE:'future',//будущее
-  PRESENT:'present',//настоящее
-  PAST:'past',};//прошлое
+  FUTURE: 'future',//будущее
+  PRESENT: 'present',//настоящее
+  PAST: 'past',
+};//прошлое
 
 const Mode = {
-  DEFAULT:'DEFAULT',
-  EDITING:'EDITING',
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
 };
 
 const UserAction = {
@@ -80,8 +81,8 @@ const TimeLimit = {
   UPPER_LIMIT: 1000,
 };
 const EditType = {
-  EDITING : 'EDITING',
-  CREATING : 'CREATING'
+  EDITING: 'EDITING',
+  CREATING: 'CREATING'
 };
 export {
   EditType,

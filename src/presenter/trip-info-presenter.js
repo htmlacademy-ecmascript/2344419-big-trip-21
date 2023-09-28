@@ -13,11 +13,11 @@ export default class TripInfoPresenter {
   #tripInfoComponent = null;
   #sortedPoints = null;
 
-  constructor({tripInfoContainer, offersModel, destinationsModel, pointsModel, mockService}) {
+  constructor({tripInfoContainer, offersModel, destinationsModel, pointModel, mockService}) {
     this.#tripInfoContainer = tripInfoContainer;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
-    this.#pointModel = pointsModel;
+    this.#pointModel = pointModel;
     this.#mockService = mockService;
 
     this.#mockService.addObserver(this.#handleModelEvent);
@@ -26,7 +26,7 @@ export default class TripInfoPresenter {
   init() {
     const prevTripInfoComponent = this.#tripInfoComponent;
 
-    if (this.#pointModel.points && this.#pointModel.points.length !== 0) {
+    if (this.#pointModel.points && this.#pointModel.points.length) {
       this.#sortedPoints = this.#pointModel.points.sort(sortPointsByDay);
       this.#tripInfoComponent = new InfoView(this.#getTripTitle(), this.#getTripDuration(), this.#getTotalTripCost());
 
@@ -48,11 +48,13 @@ export default class TripInfoPresenter {
     const destinations = this.#destinationsModel.destinations;
     const destinationNames = this.#sortedPoints.map((point) => getDestinationsById(point.destination, destinations).name);
 
-    return destinationNames.length <= DESTINATION_ITEMS_LENGTH ? destinationNames.join('&nbsp;&mdash;&nbsp;') : `${destinationNames.at(0)}&nbsp;&mdash;&nbsp;...&nbsp;&mdash;&nbsp;${destinationNames.at(-1)}`;
+    return destinationNames.length <= DESTINATION_ITEMS_LENGTH ? destinationNames.join('&nbsp;&mdash;&nbsp;')
+      : `${destinationNames.at(0)}&nbsp;&mdash;&nbsp;...&nbsp;&mdash;&nbsp;${destinationNames.at(-1)}`;
   }
 
   #getTripDuration() {
-    return `${(dayjs(this.#sortedPoints.at(0).dateFrom).format('DD MMM')).toString()}&nbsp;&mdash;&nbsp;${(dayjs(this.#sortedPoints.at(-1).dateTo).format('DD MMM')).toString()}`;//падают тесты EXTRA при формате "DD MMM - DD"
+    return `${(dayjs(this.#sortedPoints.at(0).dateFrom).format('DD MMM'))
+      .toString()}&nbsp;&mdash;&nbsp;${(dayjs(this.#sortedPoints.at(-1).dateTo).format('DD MMM')).toString()}`;
   }
 
   #getTotalTripCost() {

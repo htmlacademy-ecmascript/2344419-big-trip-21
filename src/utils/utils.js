@@ -23,16 +23,16 @@ const DATE_FORMAT = {
 const CreateToUpperCase = (word) =>
   word.charAt(0).toUpperCase() + word.slice(1);
 
-const FormatStringToShortDate = (inputDate) =>//дата маршрута малая
+const FormatStringToShortDate = (inputDate) =>
   inputDate ? dayjs(inputDate).format(DATE_FORMAT.monthDay) : '';
-const formatSrtingToDateTime = (inputDate) =>// полная дата начала и конца маршрута
+const formatSrtingToDateTime = (inputDate) =>
   inputDate ? dayjs(inputDate).format(DATE_FORMAT.fullData) : '';
-const formatStringToTime = (inputDate) =>//протяженность маршрута часы/минуты
+const formatStringToTime = (inputDate) =>
   inputDate ? dayjs(inputDate).format(DATE_FORMAT.watchMinute) : '';
 
 const capitalize = (string) =>`${string[0].toUpperCase()}${string.slice(1)}`;
 
-const getPointDuration = (dateFrom, dateTo) => {//время нахождения в точке
+const getPointDuration = (dateFrom, dateTo) => {
   const timeDiff = dayjs(dateFrom).diff(dayjs(dateTo));
   let pointDuration = 0;
   switch (true){
@@ -57,12 +57,12 @@ const Duration = {
 
 let date = dayjs().subtract(getRandomId(0, Duration.DAY), 'day').toDate();
 
-const getDate = ({next}) => {//формируем дату
-  const minsGap = getRandomId(0, Duration.MIN);//формируем случайные данные
+const getDate = ({next}) => {
+  const minsGap = getRandomId(0, Duration.MIN);
   const hoursGap = getRandomId(0, Duration.HOUR);
   const daysGap = getRandomId(0, Duration.DAY);
   if (next) {
-    date = dayjs(date)//прибавляем их к текущей дате
+    date = dayjs(date)
       .add(minsGap, 'minute')
       .add(hoursGap, 'hour')
       .subtract(daysGap, 'day')
