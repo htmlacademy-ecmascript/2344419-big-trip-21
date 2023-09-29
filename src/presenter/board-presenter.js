@@ -55,7 +55,7 @@ export default class BoardPresenter {
     render(this.#eventListComponent, this.#container);
 
     this.#newPointPresenter = new NewPointPresenter({
-      container: this.#eventListComponent.element,
+      container: this.#eventListComponent,
       destinationModel: this.#destinationsModel,
       offersModel: this.#offersModel,
       onDataChange: this.#handleViewAction,

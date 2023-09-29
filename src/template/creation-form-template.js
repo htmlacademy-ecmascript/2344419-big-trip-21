@@ -2,9 +2,9 @@ import { formatSrtingToDateTime, CreateToUpperCase } from '../utils/utils.js';
 import { getOffersByType, getDestinationsById } from '../utils/utils-trip-info.js';
 import he from 'he';
 
-function createEventTypesTemplate(pointTypes, isDisabled) {
-  if (pointTypes) {
-    return pointTypes.map((item) => `
+function createEventTypesTemplate(pointOffers, isDisabled) {
+  if (pointOffers) {
+    return pointOffers.map((item) => `
       <div class="event__type-item">
         <input id="event-type-${he.encode(item.type)}-1" class="event__type-input  visually-hidden"
         type="radio" name="event-type" value="${he.encode(item.type)}" ${isDisabled ? 'disabled' : ''}>
@@ -104,7 +104,7 @@ function createDeleteButtonTemplate(isEditForm, isDeleting, isSaving) {
   return `<button class="event__reset-btn" type="reset"${isSaving ? ' disabled' : ''}>Cancel</button>`;
 }
 
-function createFormTemplite({ state, pointTypes, destinations, offers, isEditForm }) {
+function createFormTemplite({ state, destinations, offers, isEditForm }) {
   const {
     newPointType,
     newDestination,
@@ -144,7 +144,7 @@ function createFormTemplite({ state, pointTypes, destinations, offers, isEditFor
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
 
-                ${createEventTypesTemplate(pointTypes, isDisabled)}
+                ${createEventTypesTemplate(offers, isDisabled)}
               </fieldset>
             </div>
           </div>

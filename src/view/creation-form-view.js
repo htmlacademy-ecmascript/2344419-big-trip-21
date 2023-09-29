@@ -17,15 +17,13 @@ export default class CreateFormView extends AbstractStatefulView {
 
   #datepickerTo = null;
   #datepickerFrom = null;
-  #pointTypes = null;
 
-  constructor({ point = BLANK_POINT, pointTypes, pointDestinations, pointOffers,
+  constructor({ point = BLANK_POINT, pointDestinations, pointOffers,
     onFormSubmit = null, onArrowUpClick = null, onDeleteClick = null, onCancelClick = null }) {
     super();
     this._setState(CreateFormView.parsePointToState({ point }));
     this.#pointDestinations = pointDestinations;
     this.#pointOffers = pointOffers;
-    this.#pointTypes = pointTypes;
     this.#handleFormSubmit = onFormSubmit;
     this.#handleArrowUpClick = onArrowUpClick;
     this.#handleDeleteClick = onDeleteClick;
@@ -90,10 +88,10 @@ export default class CreateFormView extends AbstractStatefulView {
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateElement({
+      offers: [],
+      newPointType: evt.target.value,
       point: {
         ...this._state.point,
-        newPointType: evt.target.value,
-        offers: []
       }
     });
   };

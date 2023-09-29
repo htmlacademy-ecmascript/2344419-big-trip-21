@@ -19,7 +19,7 @@ function getSortItem(type, isChecked) {
 }
 
 function createSortingTemplite(sortItems) {
-  return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+  return `<form class="trip-events__trip-sort trip-sort" action="#" method="get">
   ${sortItems.map((item) => getSortItem(item)).join('')}
 </form>`;
 }
