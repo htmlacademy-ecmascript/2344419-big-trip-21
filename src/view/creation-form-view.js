@@ -89,9 +89,9 @@ export default class CreateFormView extends AbstractStatefulView {
     evt.preventDefault();
     this.updateElement({
       offers: [],
-      newPointType: evt.target.value,
       point: {
         ...this._state.point,
+        type: evt.target.value,
       }
     });
   };
@@ -99,8 +99,11 @@ export default class CreateFormView extends AbstractStatefulView {
   #destinationChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateElement({
-      destination: '',
-      newDestination: evt.target.value ? getDestinationByName(evt.target.value, this.#pointDestinations).id : false,
+      point: {
+        ...this._state.point,
+        // destination: '',
+        destination: evt.target.value ? getDestinationByName(evt.target.value, this.#pointDestinations).id : false,
+      },
     });
   };
 

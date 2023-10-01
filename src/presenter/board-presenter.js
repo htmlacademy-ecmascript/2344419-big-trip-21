@@ -55,7 +55,7 @@ export default class BoardPresenter {
     render(this.#eventListComponent, this.#container);
 
     this.#newPointPresenter = new NewPointPresenter({
-      container: this.#eventListComponent,
+      container: this.#eventListComponent.element,
       destinationModel: this.#destinationsModel,
       offersModel: this.#offersModel,
       onDataChange: this.#handleViewAction,
@@ -118,20 +118,22 @@ export default class BoardPresenter {
 
   #handleViewAction = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
+    const result = update.point ? update.point : update;
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointPresenters.get(update.point.id).setSaving();
+        this.#pointPresenters.get(result.id).setSaving();
         try {
-          await this.#pointModel.updatePoint(updateType, update.point);
+          await this.#pointModel.updatePoint(updateType, result);
         } catch (err) {
-          this.#pointPresenters.get(update.point.id).setAborting();
+          this.#pointPresenters.get(result.id).setAborting();
         }
         break;
 
       case UserAction.ADD_POINT:
+
         this.#newPointPresenter.setSaving();
         try {
-          await this.#pointModel.addPoint(updateType, update.point);
+          await this.#pointModel.addPoint(updateType, { ...update.point, id: undefined });
         } catch (err) {
           this.#newPointPresenter.setAborting();
         }
