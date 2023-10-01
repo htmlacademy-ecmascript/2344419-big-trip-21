@@ -118,14 +118,13 @@ export default class BoardPresenter {
 
   #handleViewAction = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
-    const result = update.point ? update.point : update;
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointPresenters.get(result.id).setSaving();
+        this.#pointPresenters.get(update.id).setSaving();
         try {
-          await this.#pointModel.updatePoint(updateType, result);
+          await this.#pointModel.updatePoint(updateType, update);
         } catch (err) {
-          this.#pointPresenters.get(result.id).setAborting();
+          this.#pointPresenters.get(update.id).setAborting();
         }
         break;
 
@@ -133,18 +132,18 @@ export default class BoardPresenter {
 
         this.#newPointPresenter.setSaving();
         try {
-          await this.#pointModel.addPoint(updateType, { ...update.point, id: undefined });
+          await this.#pointModel.addPoint(updateType, update);
         } catch (err) {
           this.#newPointPresenter.setAborting();
         }
         break;
 
       case UserAction.DELETE_POINT:
-        this.#pointPresenters.get(update.point.id).setDeleting();
+        this.#pointPresenters.get(update.id).setDeleting();
         try {
-          await this.#pointModel.deletePoint(updateType, update.point);
+          await this.#pointModel.deletePoint(updateType, update);
         } catch (err) {
-          this.#pointPresenters.get(update.point.id).setAborting();
+          this.#pointPresenters.get(update.id).setAborting();
         }
         break;
     }
@@ -191,7 +190,7 @@ export default class BoardPresenter {
   #renderSort = () => {
     const prevSortComponent = this.#sortComponent;
     this.#sortComponent = new SortingView({
-      items: Array.from(Object.keys(SortType)),
+      items: Array.from(Object.values(SortType)),
       onItemChange: this.#handleSortTypeChange,
     });
     if (prevSortComponent === null) {

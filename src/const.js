@@ -14,34 +14,23 @@ const WAYPOINT_TYPE = [
   'Restaurant',
 ];
 
-const POINT_EMPTY = {
-  basePrice: 0,
-  dateFrom: null,
-  dateTo: null,
-  destination: null,
-  isFavorite: false,
-  offers: [],
-  type: DEFAULT_TYPE,
-};
-
 
 const SortType = {
-  DAY: 'DAY',
-  EVENT: 'EVENT',
-  TIME: 'TIME',
-  PRICE: 'PRICE',
-  OFFER: 'OFFER',
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFER: 'offer',
 };
 
 const BLANK_POINT = {
-  id: 0,
   basePrice: null,
   dateFrom: null,
   dateTo: null,
   destination: null,
   isFavorite: false,
   offers: [],
-  type: 'flight'
+  type: DEFAULT_TYPE
 };
 const enabledSortType = {
   [SortType.DAY]: true,
@@ -80,12 +69,8 @@ const TimeLimit = {
   LOWER_LIMIT: 350,
   UPPER_LIMIT: 1000,
 };
-const EditType = {
-  EDITING: 'EDITING',
-  CREATING: 'CREATING'
-};
+
 export {
-  EditType,
   UpdateType,
   TimeLimit,
   UserAction,
@@ -94,7 +79,6 @@ export {
   enabledSortType,
   WAYPOINT_TYPE,
   DEFAULT_TYPE,
-  POINT_EMPTY,
   BLANK_POINT,
   FilterType,
   DESTINATION_ITEMS_LENGTH

@@ -129,9 +129,9 @@ export default class PointPresenter {
     }
   };
 
-  #handleArrowUpClick = () => {//обработчик клика по стрелке вверх
+  #handleArrowUpClick = () => {
     this.#pointEditComponent.reset(this.#point);
-    this.#replaceFormToPoint();//скрываем форму редактирования открываем точку
+    this.#replaceFormToPoint();
   };
 
   #handleEditClick = () => {

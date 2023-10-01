@@ -21,7 +21,7 @@ export default class CreateFormView extends AbstractStatefulView {
   constructor({ point = BLANK_POINT, pointDestinations, pointOffers,
     onFormSubmit = null, onArrowUpClick = null, onDeleteClick = null, onCancelClick = null }) {
     super();
-    this._setState(CreateFormView.parsePointToState({ point }));
+    this._setState(CreateFormView.parsePointToState(point));
     this.#pointDestinations = pointDestinations;
     this.#pointOffers = pointOffers;
     this.#handleFormSubmit = onFormSubmit;
@@ -33,12 +33,12 @@ export default class CreateFormView extends AbstractStatefulView {
 
   get template() {
     const isEditForm = this.#handleDeleteClick;
-    return createFormTemplite({
-      state: this._state,
-      destinations: this.#pointDestinations,
-      offers: this.#pointOffers,
+    return createFormTemplite(
+      this._state,
+      this.#pointDestinations,
+      this.#pointOffers,
       isEditForm
-    });
+    );
   }
 
   removeElement() {
@@ -88,22 +88,18 @@ export default class CreateFormView extends AbstractStatefulView {
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateElement({
+      ...this._state,
       offers: [],
-      point: {
-        ...this._state.point,
-        type: evt.target.value,
-      }
+      type: evt.target.value,
+
     });
   };
 
   #destinationChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateElement({
-      point: {
-        ...this._state.point,
-        // destination: '',
-        destination: evt.target.value ? getDestinationByName(evt.target.value, this.#pointDestinations).id : false,
-      },
+      ...this._state,
+      destination: evt.target.value ? getDestinationByName(evt.target.value, this.#pointDestinations).id : false,
     });
   };
 
@@ -115,7 +111,7 @@ export default class CreateFormView extends AbstractStatefulView {
 
     const clickedOfferElement = evt.target.closest('.event__offer-selector').querySelector('input');
     const clickedOfferId = clickedOfferElement.dataset.offerId;
-    let selectedOffers = this._state.point.offers;
+    let selectedOffers = this._state.offers;
 
     evt.target.closest('.event__offer-selector').querySelector('input').toggleAttribute('checked');
 
@@ -130,41 +126,33 @@ export default class CreateFormView extends AbstractStatefulView {
     }
 
     this.updateElement({
-      point: {
-        ...this._state.point,
-        offers: selectedOffers
-      }
+      ...this._state,
+      offers: selectedOffers
     });
   };
 
   #priceChangeHandler = (evt) => {
     evt.preventDefault();
     this._setState({
-      point: {
-        ...this._state.point,
-        basePrice: Number(evt.target.value)
-      }
+      basePrice: Number(evt.target.value)
     });
   };
 
   #dateFromCloseHandler = ([userDate]) => {
     this._setState({
-      point: {
-        ...this._state.point,
-        dateFrom: userDate
-      }
+      ...this._state,
+
+      dateFrom: userDate
     });
-    this.#datepickerTo.set('minDate', this._state.point.dataFrom);
+    this.#datepickerTo.set('minDate', this._state.dataFrom);
   };
 
   #dateToCloseHandler = ([userDate]) => {
     this._setState({
-      point: {
-        ...this._state.point,
-        dateTo: userDate
-      }
+      ...this._state,
+      dateTo: userDate
     });
-    this.#datepickerFrom.set('maxDate', this._state.point.dateTo);
+    this.#datepickerFrom.set('maxDate', this._state.dateTo);
   };
 
   #setDatepickers = () => {
@@ -181,17 +169,17 @@ export default class CreateFormView extends AbstractStatefulView {
     this.#datepickerFrom = flatpickr(
       dateFromElement, {
       ...commonConfig,
-      defaultDate: this._state.point.dataFrom,
+      defaultDate: this._state.dataFrom,
       onClose: this.#dateFromCloseHandler,
-      maxDate: this._state.point.dateTo,
+      maxDate: this._state.dateTo,
     },
     );
     this.#datepickerTo = flatpickr(
       dateToElement, {
       ...commonConfig,
-      defaultDate: this._state.point.dataTo,
+      defaultDate: this._state.dataTo,
       onClose: this.#dateToCloseHandler,
-      maxDate: this._state.point.dataFrom,
+      maxDate: this._state.dataFrom,
     }
     );
   };

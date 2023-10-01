@@ -104,21 +104,20 @@ function createDeleteButtonTemplate(isEditForm, isDeleting, isSaving) {
   return `<button class="event__reset-btn" type="reset"${isSaving ? ' disabled' : ''}>Cancel</button>`;
 }
 
-function createFormTemplite({ state, destinations, offers, isEditForm }) {
+function createFormTemplite(state, destinations, offers, isEditForm) {
   const {
     newPointType,
     newDestination,
     isDisabled,
     isDeleting,
     isSaving,
-    point } = state;
-
-  const {
     type,
     dateFrom,
     dateTo,
     basePrice,
-    destination } = point;
+    destination
+  } = state;
+
 
   const pointDestination = getDestinationsById(newDestination ? newDestination : destination, destinations);
   let pointOffers = [];
@@ -184,7 +183,7 @@ function createFormTemplite({ state, destinations, offers, isEditForm }) {
 
         </header>
         <section class="event__details">
-          ${pointOffers.length > 0 ? createEventOffersTemplate(pointOffers, point.offers, isDisabled) : ''}
+          ${pointOffers.length > 0 ? createEventOffersTemplate(pointOffers, state.offers, isDisabled) : ''}
           ${createDestinationTemplate(pointDestination ? pointDestination : '')}
         </section>
       </form>
