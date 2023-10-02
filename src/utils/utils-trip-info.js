@@ -7,6 +7,13 @@ function getDestinationsById(id, destinations) {
   return '';
 }
 
+function getDestinationByName(name, destinations) {
+  if (destinations.some((destination) => destination.name === name)) {
+    return destinations.find((destination) => destination.name === name);
+  }
+  return '';
+}
+
 function getOffersByType(type, offers) {
   return offers.find((offer) => offer.type === type).offers;
 }
@@ -19,4 +26,4 @@ function sortPointsByDay(pointA, pointB) {
   return dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
 }
 
-export {getOffersByType, sortPointsByDay, getCheckedOffers, getDestinationsById};
+export { getOffersByType, sortPointsByDay, getCheckedOffers, getDestinationsById, getDestinationByName };

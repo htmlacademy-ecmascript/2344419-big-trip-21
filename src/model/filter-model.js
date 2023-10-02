@@ -5,10 +5,10 @@ export default class FilterModel extends Observable {
   #filter = FilterType.EVERYTHING;
 
   get filter() {
-    return this.#filter;//возв текущий фильтр
+    return this.#filter;
   }
 
-  setFilter(updateType, filter) {//обновление
+  setFilter(updateType, filter) {
     this.#filter = filter;
     this._notify(updateType, filter);
   }
