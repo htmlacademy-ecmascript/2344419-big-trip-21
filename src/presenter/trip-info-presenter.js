@@ -1,26 +1,26 @@
 import dayjs from 'dayjs';
 import InfoView from '../view/info-container-view';
-import {render, replace, remove, RenderPosition} from '../framework/render.js';
-import {getDestinationsById, getOffersByType, getCheckedOffers, sortPointsByDay} from '../utils/utils-trip-info.js';
-import {DESTINATION_ITEMS_LENGTH} from '../const.js';
+import { render, replace, remove, RenderPosition } from '../framework/render.js';
+import { getDestinationsById, getOffersByType, getCheckedOffers, sortPointsByDay } from '../utils/utils-trip-info.js';
+import { DESTINATION_ITEMS_LENGTH } from '../const.js';
 
 export default class TripInfoPresenter {
   #tripInfoContainer = null;
   #offersModel = null;
   #destinationsModel = null;
   #pointModel = null;
-  #mockService = null;
+  #serviceData = null;
   #tripInfoComponent = null;
   #sortedPoints = null;
 
-  constructor({tripInfoContainer, offersModel, destinationsModel, pointModel, mockService}) {
+  constructor({ tripInfoContainer, offersModel, destinationsModel, pointModel, serviceData }) {
     this.#tripInfoContainer = tripInfoContainer;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
     this.#pointModel = pointModel;
-    this.#mockService = mockService;
+    this.#serviceData = serviceData;
 
-    this.#mockService.addObserver(this.#handleModelEvent);
+    this.#serviceData.addObserver(this.#handleModelEvent);
   }
 
   init() {

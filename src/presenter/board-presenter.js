@@ -18,7 +18,7 @@ export default class BoardPresenter {
   #offersModel = null;
   #filterModel = null;
   #destinationsModel = null;
-  #mockService = null;
+  #serviceData = null;
   #sortComponent = null;
   #newFilterPresenter = null;
   #newPointPresenter = null;
@@ -41,13 +41,13 @@ export default class BoardPresenter {
 
   #pointPresenters = new Map();
 
-  constructor({ container, pointModel, offersModel, filterModel, destinationsModel, mockService, onNewPointButtonDisable, onNewPointButtonUnblock }) {
+  constructor({ container, pointModel, offersModel, filterModel, destinationsModel, serviceData, onNewPointButtonDisable, onNewPointButtonUnblock }) {
     this.#container = container;
     this.#pointModel = pointModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
     this.#filterModel = filterModel;
-    this.#mockService = mockService;
+    this.#serviceData = serviceData;
     this.#handleNewPointButtonDisable = onNewPointButtonDisable;
     this.#handleNewPointButtonUnlock = onNewPointButtonUnblock;
 
@@ -70,14 +70,14 @@ export default class BoardPresenter {
     });
 
 
-    this.#mockService.addObserver(this.#handleModelEvent);
+    this.#serviceData.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
     const points = this.#pointModel.points;
     if (!points) {
-      return null;
+      return [];
     }
     this.#filterType = this.#filterModel.filter;
     const filteredPoints = filter[this.#filterType](points);
@@ -181,9 +181,9 @@ export default class BoardPresenter {
     if (this.#currentSortType === item) {
       return;
     }
+
     this.#currentSortType = item;
     this.#clearPoints();
-    this.#renderSort();
     this.#renderPoints();
   };
 

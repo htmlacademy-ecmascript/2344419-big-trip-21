@@ -32,20 +32,13 @@ const BLANK_POINT = {
   offers: [],
   type: DEFAULT_TYPE
 };
-const enabledSortType = {
-  [SortType.DAY]: true,
-  [SortType.EVENT]: false,
-  [SortType.TIME]: true,
-  [SortType.PRICE]: true,
-  [SortType.OFFER]: false
-};
 
 const FilterType = {
-  EVERYTHING: 'everything',//все
-  FUTURE: 'future',//будущее
-  PRESENT: 'present',//настоящее
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
   PAST: 'past',
-};//прошлое
+};
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -59,10 +52,10 @@ const UserAction = {
 };
 
 const UpdateType = {
-  PATCH: 'PATCH',//малые изменения
-  MINOR: 'MINOR',//средние изменения
-  MAJOR: 'MAJOR',//большие изменения
-  INIT: 'INIT',//инициализация
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 const TimeLimit = {
@@ -76,7 +69,6 @@ export {
   UserAction,
   Mode,
   SortType,
-  enabledSortType,
   WAYPOINT_TYPE,
   DEFAULT_TYPE,
   BLANK_POINT,

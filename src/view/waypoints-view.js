@@ -1,4 +1,4 @@
-//точки маршрута
+
 import { createWayPointTemplite } from '../template/waypoints-template.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
