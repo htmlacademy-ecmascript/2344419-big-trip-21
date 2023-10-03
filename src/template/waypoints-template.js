@@ -1,4 +1,4 @@
-import { formatStringToTime, FormatStringToShortDate, getPointDuration, getOffersByType, getCheckedOffers } from '../utils/utils.js';
+import { formatStringToTime, FormatStringToShortDate, getPointDuration, getCheckedOffers } from '../utils/utils.js';
 
 
 function createEventOffersTemplate(pointOffers) {

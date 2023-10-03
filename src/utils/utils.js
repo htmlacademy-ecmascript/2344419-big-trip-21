@@ -72,9 +72,6 @@ const getDate = ({ next }) => {
   return date;
 };
 
-function updateItem(items, update) {
-  return items.map((item) => item.id === update.id ? update : item);
-}
 
 function getOffersByType(type, offers) {
   return offers.find((offer) => offer.type === type).offers;
@@ -95,5 +92,4 @@ export {
   capitalize,
   getPointDuration,
   CreateToUpperCase,
-  updateItem
 };

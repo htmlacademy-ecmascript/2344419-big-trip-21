@@ -223,16 +223,21 @@ export default class BoardPresenter {
   };
 
   #renderBoard = () => {
-    this.#isServerAvailable = Boolean(this.points);
+    this.#isServerAvailable = this.#serviceData.getDestinations();
     this.#newFilterPresenter.init();
     if (this.#isLoading) {
       this.#renderLoading();
       this.#handleNewPointButtonDisable();
       return;
     }
-    if (!this.#isServerAvailable || this.points.length === 0) {
+    if (!this.#isServerAvailable) {
       this.#handleNewPointButtonUnlock();
-      this.#renderNoPoint(this.#isServerAvailable);
+      this.#renderNoPoint(false);
+      return;
+    }
+    if (this.points.length === 0) {
+      this.#handleNewPointButtonUnlock();
+      this.#renderNoPoint(true);
       return;
     }
 
