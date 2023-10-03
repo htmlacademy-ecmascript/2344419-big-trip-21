@@ -75,11 +75,11 @@ export default class BoardPresenter {
   }
 
   get points() {
+    this.#filterType = this.#filterModel.filter;
     const points = this.#pointModel.points;
     if (!points) {
       return [];
     }
-    this.#filterType = this.#filterModel.filter;
     const filteredPoints = filter[this.#filterType](points);
 
     switch (this.#currentSortType) {
@@ -101,8 +101,10 @@ export default class BoardPresenter {
 
   createPoint() {
     this.#currentSortType = SortType.DAY;
+    this.#filterType = FilterType.EVERYTHING;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init();
+
     if (this.#noPointComponent) {
       this._isMessageRemoved = true;
       remove(this.#noPointComponent);
@@ -259,7 +261,7 @@ export default class BoardPresenter {
       filterType: this.#filterType,
       isServerAvailable
     });
-    if (isServerAvailable) {
+    if (!isServerAvailable) {
       this.#handleNewPointButtonDisable();
     }
     render(this.#noPointComponent, this.#container);

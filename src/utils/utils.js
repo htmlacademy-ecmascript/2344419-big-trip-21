@@ -32,8 +32,10 @@ const formatStringToTime = (inputDate) =>
 const capitalize = (string) => `${string[0].toUpperCase()}${string.slice(1)}`;
 
 const getPointDuration = (dateFrom, dateTo) => {
-  const timeDiff = dayjs(dateFrom).diff(dayjs(dateTo));
+  const timeDiff = dayjs(dateTo).diff(dayjs(dateFrom));
+
   let pointDuration = 0;
+
   switch (true) {
     case (timeDiff >= MSEC_IN_DAY):
       pointDuration = dayjs.duration(timeDiff).format('DD[D] HH[H] mm[M]');
@@ -45,6 +47,7 @@ const getPointDuration = (dateFrom, dateTo) => {
       pointDuration = dayjs.duration(timeDiff).format('mm[M]');
       break;
   }
+
   return pointDuration;
 };
 const Duration = {
@@ -52,7 +55,6 @@ const Duration = {
   DAY: 7,
   HOUR: 23
 };
-
 
 let date = dayjs().subtract(getRandomId(0, Duration.DAY), 'day').toDate();
 
@@ -74,7 +76,17 @@ function updateItem(items, update) {
   return items.map((item) => item.id === update.id ? update : item);
 }
 
+function getOffersByType(type, offers) {
+  return offers.find((offer) => offer.type === type).offers;
+}
+
+function getCheckedOffers(checkedOffersId, pointOffers) {
+  return checkedOffersId.map((IdOffer) => pointOffers.find((offer) => offer.id === IdOffer));
+}
+
 export {
+  getOffersByType,
+  getCheckedOffers,
   getRandomId,
   getDate,
   FormatStringToShortDate,

@@ -9,7 +9,7 @@ const WAYPOINT_TYPE = [
   'Ship',
   'Drive',
   'Flight',
-  'CheckIn',
+  'Check-In',
   'Sightseeing',
   'Restaurant',
 ];
@@ -24,7 +24,7 @@ const SortType = {
 };
 
 const BLANK_POINT = {
-  basePrice: null,
+  basePrice: 0,
   dateFrom: null,
   dateTo: null,
   destination: null,

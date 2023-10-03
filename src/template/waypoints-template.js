@@ -1,10 +1,34 @@
-import { formatStringToTime, FormatStringToShortDate, getPointDuration } from '../utils/utils.js';
+import { formatStringToTime, FormatStringToShortDate, getPointDuration, getOffersByType, getCheckedOffers } from '../utils/utils.js';
 
-function createWayPointTemplite({point, pointDestination, pointOffers}){
-  const {
-    basePrice, dateFrom, dateTo, isFavorite, type
-  } = point;
+
+function createEventOffersTemplate(pointOffers) {
+  let eventOffersTemplate = '';
+
+  if (pointOffers.length === 0) {
+    return '';
+  }
+
+  pointOffers.forEach((offer) => {
+    if (offer) {
+      const { title, price } = offer;
+
+      eventOffersTemplate += `
+        <li class="event__offer">
+          <span class="event__offer-title">${title}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${price}</span>
+        </li>`;
+    }
+  });
+
+  return eventOffersTemplate;
+}
+
+
+function createWayPointTemplite({ point, pointDestination, pointOffers }) {
+  const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
   const offf = pointOffers.find((e) => e.type === type).offers;
+  const checkedOffers = getCheckedOffers(point.offers, offf);
 
   const dest = pointDestination.find((e) => e.id === point.destination);
   const favoriteClassName = isFavorite
@@ -25,21 +49,15 @@ function createWayPointTemplite({point, pointDestination, pointOffers}){
         &mdash;
         <time class="event__end-time" datetime=${formatStringToTime(dateTo)}>${formatStringToTime(dateTo)}</time>
       </p>
-      <p class="event__duration">${getPointDuration(dateFrom,dateTo)}</p>
+      <p class="event__duration">${getPointDuration(dateFrom, dateTo)}</p>
     </div>
     <p class="event__price">
-      &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
+      &euro;&nbsp;<span class="event__price-value">${(basePrice)}</span>
     </p>
-    <h4 class="visually-hidden">Offers:</h4>
-      <ul class="event__selected-offers">
-      ${offf.map((e)=> (
-    `<li class="event__offer">
-      <span class="event__offer-title">${e.title}</span>
-      &plus;&euro;&nbsp;
-      <span class="event__offer-price">${e.price}</span>
-    </li>`
-  )).join('')}
-      </ul>
+   <h4 class="visually-hidden">Offers:</h4>
+        <ul class="event__selected-offers">
+          ${createEventOffersTemplate(checkedOffers)}
+        </ul>
     <button class="${favoriteClassName}" type="button">
           <span class="visually-hidden">Add to favorite</span>
       <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
