@@ -14,7 +14,7 @@ import PointsModel from './model/points-model.js';
 import { render } from './framework/render.js';
 import PointsApiService from './service/points-api-service.js';
 
-const AUTHORIZATION = 'Basic eo0w590ik1989b';
+const AUTHORIZATION = 'Basic eo0w590ik2989b';
 const END_POINT = 'https://21.objects.pages.academy/big-trip';
 
 

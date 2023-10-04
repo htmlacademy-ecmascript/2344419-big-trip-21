@@ -50,7 +50,9 @@ function createEventOffersTemplate(pointOffers, pointCheckedOffers, isDisabled) 
 
   pointOffers.map((offer) => {
     eventOffersTemplate += `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${changeToLowercase(offer.title)}-1" type="checkbox" name="event-offer-${changeToLowercase(offer.title)}" data-offer-id="${offer.id}" ${pointCheckedOffers.length > 0 && pointCheckedOffers.includes(offer.id) ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}>
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${changeToLowercase(offer.title)}-1"
+        type="checkbox" name="event-offer-${changeToLowercase(offer.title)}"
+        data-offer-id="${offer.id}" ${pointCheckedOffers.length > 0 && pointCheckedOffers.includes(offer.id) ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}>
         <label class="event__offer-label" for="event-offer-${changeToLowercase(offer.title)}-1">
           <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;
@@ -121,7 +123,6 @@ function createFormTemplite(state, destinations, offers, isEditForm) {
 
   const pointDestination = getDestinationsById(newDestination ? newDestination : destination, destinations);
   let pointOffers = [];
-
   if (offers) {
     pointOffers = getOffersByType(newPointType ? newPointType : type, offers);
   }
@@ -150,7 +151,7 @@ function createFormTemplite(state, destinations, offers, isEditForm) {
 
           <div class="event__field-group  event__field-group--destination">
             <label class="event__label  event__type-output" for="event-destination-1">
-              ${newPointType ? newPointType : type}
+              ${newPointType ? newPointType : CreateToUpperCase(type)}
             </label>
               ${createDestinationListTemplate(pointDestination, destinations, isDisabled)}
           </div>

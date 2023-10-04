@@ -48,8 +48,7 @@ export default class TripInfoPresenter {
     const destinations = this.#destinationsModel.destinations;
     const destinationNames = this.#sortedPoints.map((point) => getDestinationsById(point.destination, destinations).name);
 
-    return destinationNames.length <= DESTINATION_ITEMS_LENGTH ? destinationNames.join('&nbsp;&mdash;&nbsp;')
-      : `${destinationNames.at(0)}&nbsp;&mdash;&nbsp;...&nbsp;&mdash;&nbsp;${destinationNames.at(-1)}`;
+    return destinationNames.length <= DESTINATION_ITEMS_LENGTH ? destinationNames.join('&nbsp;&mdash;&nbsp;') : `${destinationNames.at(0)}&nbsp;&mdash;&nbsp;...&nbsp;&mdash;&nbsp;${destinationNames.at(-1)}`;
   }
 
   #getTripDuration() {

@@ -10,9 +10,9 @@ const NoPointTextType = {
 
 function createNoPointTemplite(filterType, isServerAvailable) {
   const noPointTextValue = NoPointTextType[filterType];
-  return (!isServerAvailable) ?
+  return (!isServerAvailable ?
     '<p class="trip-events__msg">Failed to load latest route information</p>'
-    : (`<p class="trip-events__msg">${noPointTextValue}</p>`);
+    : `<p class="trip-events__msg">${noPointTextValue}</p>`);
 }
 
 export default class NoPointView extends AbstractView {

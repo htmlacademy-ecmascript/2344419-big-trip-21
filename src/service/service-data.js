@@ -31,9 +31,9 @@ export default class ServiceData extends Observable {
       const points = await this.pointsApiService.points;
       this.points = points.map(this.adaptToClient);
     } catch (err) {
-      this.destinations = [];
+      this.destinations = false;
       this.offers = [];
-      this.points = [];
+      this.points = false;
     }
     this._notify(UpdateType.INIT, this.points);
   }

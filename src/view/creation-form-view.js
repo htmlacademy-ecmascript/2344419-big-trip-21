@@ -133,8 +133,10 @@ export default class CreateFormView extends AbstractStatefulView {
 
   #priceChangeHandler = (evt) => {
     evt.preventDefault();
+    evt.preventDefault();
     this._setState({
-      basePrice: Number(evt.target.value)
+      ...this._state,
+      basePrice: evt.target.value,
     });
   };
 
@@ -167,20 +169,22 @@ export default class CreateFormView extends AbstractStatefulView {
       'time_24hr': true
     };
     this.#datepickerFrom = flatpickr(
-      dateFromElement, {
-      ...commonConfig,
-      defaultDate: this._state.dataFrom,
-      onClose: this.#dateFromCloseHandler,
-      maxDate: this._state.dateTo,
-    },
+      dateFromElement,
+      {
+        ...commonConfig,
+        defaultDate: this._state.dataFrom,
+        onClose: this.#dateFromCloseHandler,
+        maxDate: this._state.dateTo,
+      },
     );
     this.#datepickerTo = flatpickr(
-      dateToElement, {
-      ...commonConfig,
-      defaultDate: this._state.dataTo,
-      onClose: this.#dateToCloseHandler,
-      maxDate: this._state.dataFrom,
-    }
+      dateToElement,
+      {
+        ...commonConfig,
+        defaultDate: this._state.dataTo,
+        onClose: this.#dateToCloseHandler,
+        maxDate: this._state.dataFrom,
+      }
     );
   };
 

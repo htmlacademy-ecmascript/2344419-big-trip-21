@@ -75,11 +75,11 @@ export default class BoardPresenter {
   }
 
   get points() {
+    this.#filterType = this.#filterModel.filter;
     const points = this.#pointModel.points;
     if (!points) {
       return [];
     }
-    this.#filterType = this.#filterModel.filter;
     const filteredPoints = filter[this.#filterType](points);
 
     switch (this.#currentSortType) {
@@ -101,8 +101,10 @@ export default class BoardPresenter {
 
   createPoint() {
     this.#currentSortType = SortType.DAY;
+    this.#filterType = FilterType.EVERYTHING;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init();
+
     if (this.#noPointComponent) {
       this._isMessageRemoved = true;
       remove(this.#noPointComponent);
@@ -221,16 +223,21 @@ export default class BoardPresenter {
   };
 
   #renderBoard = () => {
-    this.#isServerAvailable = Boolean(this.points);
+    this.#isServerAvailable = this.#serviceData.getDestinations();
     this.#newFilterPresenter.init();
     if (this.#isLoading) {
       this.#renderLoading();
       this.#handleNewPointButtonDisable();
       return;
     }
-    if (!this.#isServerAvailable || this.points.length === 0) {
+    if (!this.#isServerAvailable) {
       this.#handleNewPointButtonUnlock();
-      this.#renderNoPoint(this.#isServerAvailable);
+      this.#renderNoPoint(false);
+      return;
+    }
+    if (this.points.length === 0) {
+      this.#handleNewPointButtonUnlock();
+      this.#renderNoPoint(true);
       return;
     }
 
@@ -259,7 +266,7 @@ export default class BoardPresenter {
       filterType: this.#filterType,
       isServerAvailable
     });
-    if (isServerAvailable) {
+    if (!isServerAvailable) {
       this.#handleNewPointButtonDisable();
     }
     render(this.#noPointComponent, this.#container);
