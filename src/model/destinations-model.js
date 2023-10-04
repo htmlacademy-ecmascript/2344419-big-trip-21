@@ -9,7 +9,7 @@ export default class DestinationsModel extends Observable{
 
   }
 
-  get destination() {
+  get destinations() {
     return this.#service.destinations;
   }
 }

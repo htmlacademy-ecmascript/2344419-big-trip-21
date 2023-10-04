@@ -8,18 +8,18 @@ const NoPointTextType = {
   [FilterType.PAST]: 'There are no past events now',
 };
 
-function createNoPointTemplite(filterType, isServerAvailable){
+function createNoPointTemplite(filterType, isServerAvailable) {
   const noPointTextValue = NoPointTextType[filterType];
-  return isServerAvailable ? (
-    `<p class="trip-events__msg">${noPointTextValue}</p>`)
-    : '<p class="trip-events__msg">Failed to load latest route information</p>';
+  return (!isServerAvailable ?
+    '<p class="trip-events__msg">Failed to load latest route information</p>'
+    : `<p class="trip-events__msg">${noPointTextValue}</p>`);
 }
 
-export default class NoPointView extends AbstractView{
+export default class NoPointView extends AbstractView {
   #filterType = null;
   #isServerAvailable = null;
 
-  constructor({filterType, isServerAvailable}) {
+  constructor({ filterType, isServerAvailable }) {
     super();
     this.#filterType = filterType;
     this.#isServerAvailable = isServerAvailable;

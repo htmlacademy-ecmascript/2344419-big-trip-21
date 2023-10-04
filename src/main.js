@@ -1,68 +1,70 @@
 
-import NewInfoView from './view/info-container-view.js';
+
 import BoardPresenter from './presenter/board-presenter.js';
 import NewPointButtonView from './view/new-point-button-view.js';
-import FilterPresenter from './presenter/filter-presenter.js';
 
-import MockService from './service/service.js';
+import TripInfoPresenter from './presenter/trip-info-presenter.js';
+
+import ServiceData from './service/service-data.js';
 import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
 import FilterModel from './model/filter-model.js';
-
-import { render , RenderPosition} from './framework/render.js';
-import PointsApiService from './service/points-api-service.js';
 import PointsModel from './model/points-model.js';
 
-const AUTHORIZATION = 'Basic eo0w590ik19889b';
+import { render } from './framework/render.js';
+import PointsApiService from './service/points-api-service.js';
+
+const AUTHORIZATION = 'Basic eo0w590ik2989b';
 const END_POINT = 'https://21.objects.pages.academy/big-trip';
 
-const body = document.querySelector('body');//боди
-const header = body.querySelector('.page-header');//хедер
-const tripInfoElement = header.querySelector('.trip-main');//секция инфо
-const siteMainElement = document.querySelector('.page-main');//блок майн
-const eventListElement = siteMainElement.querySelector('.trip-events');//секция списка путешествий
-const filtersElement = header.querySelector('.trip-controls__filters');//фильтры
+
+const tripInfoElement = document.querySelector('.trip-main');
+const siteMainElement = document.querySelector('.page-main');
+const eventListElement = siteMainElement.querySelector('.trip-events');
 
 const pointsApiService = new PointsApiService(END_POINT, AUTHORIZATION);
 
-const mockService = new MockService({pointsApiService});
-const destinationsModel = new DestinationsModel(mockService);
-const offersModel = new OffersModel(mockService);
-const pointModel = new PointsModel(mockService);
+const serviceData = new ServiceData({ pointsApiService });
+const destinationsModel = new DestinationsModel(serviceData);
+const offersModel = new OffersModel(serviceData);
+const pointModel = new PointsModel(serviceData);
 const filterModel = new FilterModel();
 
 const boardPresenter = new BoardPresenter({
-  container:eventListElement,
+  container: eventListElement,
   destinationsModel,
   offersModel,
   pointModel,
-  mockService,
+  serviceData: serviceData,
   filterModel,
-  onNewPointDestroy: handleNewPointFormClose,
-});
-
-const filterPresenter = new FilterPresenter({
-  filterContainer: filtersElement,
-  filterModel,
-  pointModel,
+  onNewPointButtonDisable: handleNewPointButtonDisable,
+  onNewPointButtonUnblock: handleNewPointButtonUnlock,
 });
 
 const newPointButtonComponent = new NewPointButtonView({
   onClick: handleNewPointButtonClick
 });
+function handleNewPointButtonClick() {
+  boardPresenter.createPoint();
+  handleNewPointButtonDisable();
+}
 
-function handleNewPointFormClose() {
+function handleNewPointButtonDisable() {
+  newPointButtonComponent.element.disabled = true;
+}
+function handleNewPointButtonUnlock() {
   newPointButtonComponent.element.disabled = false;
 }
 
-function handleNewPointButtonClick() {
-  boardPresenter.createPoint();
-  newPointButtonComponent.element.disabled = true;
-}
-
-render(new NewInfoView(), tripInfoElement, RenderPosition.AFTERBEGIN);
-filterPresenter.init();
-boardPresenter.init();
-mockService.init().finally(() => {
-  render(newPointButtonComponent, tripInfoElement);
+new TripInfoPresenter({
+  tripInfoContainer: tripInfoElement,
+  offersModel,
+  destinationsModel,
+  pointModel,
+  serviceData: serviceData,
 });
+
+boardPresenter.init();
+render(newPointButtonComponent, tripInfoElement);
+serviceData.init();
+

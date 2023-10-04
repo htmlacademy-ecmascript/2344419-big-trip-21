@@ -9,57 +9,40 @@ const WAYPOINT_TYPE = [
   'Ship',
   'Drive',
   'Flight',
-  'CheckIn',
+  'Check-In',
   'Sightseeing',
   'Restaurant',
 ];
 
-const POINT_EMPTY = {
+
+const SortType = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFER: 'offer',
+};
+
+const BLANK_POINT = {
   basePrice: 0,
   dateFrom: null,
   dateTo: null,
   destination: null,
   isFavorite: false,
   offers: [],
-  type: DEFAULT_TYPE,
-};
-
-
-const SortType = {
-  DAY:'DAY',
-  EVENT:'EVENT',
-  TIME:'TIME',
-  PRICE:'PRICE',
-  OFFER:'OFFER',
-};
-
-const BLANK_POINT = {
-  id: 0,
-  basePrice: null,
-  dateFrom: null,
-  dateTo: null,
-  destination: null,
-  isFavorite: false,
-  offers: [],
-  type:'flight'
-};
-const enabledSortType = {
-  [SortType.DAY]: true,
-  [SortType.EVENT]: false,
-  [SortType.TIME]: true,
-  [SortType.PRICE]: true,
-  [SortType.OFFER]: false
+  type: DEFAULT_TYPE
 };
 
 const FilterType = {
-  EVERYTHING: 'everything',//все
-  FUTURE:'future',//будущее
-  PRESENT:'present',//настоящее
-  PAST:'past',};//прошлое
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
+};
 
 const Mode = {
-  DEFAULT:'DEFAULT',
-  EDITING:'EDITING',
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
 };
 
 const UserAction = {
@@ -69,31 +52,25 @@ const UserAction = {
 };
 
 const UpdateType = {
-  PATCH: 'PATCH',//малые изменения
-  MINOR: 'MINOR',//средние изменения
-  MAJOR: 'MAJOR',//большие изменения
-  INIT: 'INIT',//инициализация
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 const TimeLimit = {
   LOWER_LIMIT: 350,
   UPPER_LIMIT: 1000,
 };
-const EditType = {
-  EDITING : 'EDITING',
-  CREATING : 'CREATING'
-};
+
 export {
-  EditType,
   UpdateType,
   TimeLimit,
   UserAction,
   Mode,
   SortType,
-  enabledSortType,
   WAYPOINT_TYPE,
   DEFAULT_TYPE,
-  POINT_EMPTY,
   BLANK_POINT,
   FilterType,
   DESTINATION_ITEMS_LENGTH

@@ -5,66 +5,70 @@ import { BLANK_POINT } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import { getDestinationByName } from '../utils/utils-trip-info.js';
 
-export default class CreateFormView extends AbstractStatefulView{
+export default class CreateFormView extends AbstractStatefulView {
   #pointDestinations = null;
   #pointOffers = null;
   #handleFormSubmit = null;
   #handleArrowUpClick = null;
   #handleDeleteClick = null;
+  #handleCancelClick = null;
+
   #datepickerTo = null;
   #datepickerFrom = null;
 
-  constructor({point = BLANK_POINT, pointDestinations, pointOffers,
-    onFormSubmit, onArrowUpClick, onDeleteClick}){
+  constructor({ point = BLANK_POINT, pointDestinations, pointOffers,
+    onFormSubmit = null, onArrowUpClick = null, onDeleteClick = null, onCancelClick = null }) {
     super();
-    this._setState(CreateFormView.parsePointToState({point}));
+    this._setState(CreateFormView.parsePointToState(point));
     this.#pointDestinations = pointDestinations;
     this.#pointOffers = pointOffers;
-    this.#handleFormSubmit = onFormSubmit;//функция сохранения формы
-    this.#handleArrowUpClick = onArrowUpClick;//закрытие формы
-    this.#handleDeleteClick = onDeleteClick;//удаление
+    this.#handleFormSubmit = onFormSubmit;
+    this.#handleArrowUpClick = onArrowUpClick;
+    this.#handleDeleteClick = onDeleteClick;
+    this.#handleCancelClick = onCancelClick;
     this._restoreHandlers();
   }
 
-  get template(){
+  get template() {
     const isEditForm = this.#handleDeleteClick;
-    return createFormTemplite({
-      state: this._state,
-      pointDestinations: this.#pointDestinations,
-      pointOffers:this.#pointOffers,
+    return createFormTemplite(
+      this._state,
+      this.#pointDestinations,
+      this.#pointOffers,
       isEditForm
-    });
+    );
   }
 
-  removeElement(){
+  removeElement() {
     super.removeElement();
-    if(this.#datepickerTo){
+    if (this.#datepickerTo) {
       this.#datepickerTo.destroy();
       this.#datepickerTo = null;
     }
-    if(this.#datepickerFrom){
+    if (this.#datepickerFrom) {
       this.#datepickerFrom.destroy();
       this.#datepickerFrom = null;
     }
   }
 
-  reset(point){
+  reset(point) {
     this.updateElement(CreateFormView.parsePointToState(point));
   }
 
-  _restoreHandlers = () =>{
+  _restoreHandlers = () => {
     const availableOffersElement = this.element.querySelector('.event__available-offers');
     const resetButtonElement = this.element.querySelector('.event__reset-btn');
 
-    this.element.querySelector('form')//кнопка сохранения
-      .addEventListener('submit',this.#formSubmitHandler);
-    this.element.querySelector('.event__input--price')
-      .addEventListener('change',this.#priceChangeHandler);//изменить цену
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('#event-price-1')
+      .addEventListener('change', this.#priceChangeHandler);
     this.element.querySelector('.event__type-group')
-      .addEventListener('change',this.#typeChangeHandler);//сменить тип точки
-    this.element.querySelector('.event__input--destination')
-      .addEventListener('change',this.#destinationChangeHandler);//сменить направлени
+      .addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('#event-destination-1')
+      .addEventListener('change', this.#destinationChangeHandler);
 
     if (availableOffersElement) {
       availableOffersElement.addEventListener('click', this.#offersChangeHandler);
@@ -74,33 +78,28 @@ export default class CreateFormView extends AbstractStatefulView{
       this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formArrowUpHandler);
       resetButtonElement.addEventListener('click', this.#deleteClickHandler);
     } else {
-      resetButtonElement.addEventListener('click', this.#formSubmitHandler);
+      resetButtonElement.addEventListener('click', this.#formCancelHandler);
     }
 
     this.#setDatepickers();
   };
 
 
-  #typeChangeHandler = (evt) =>{//перерисовка оферов по выбранному типу
+  #typeChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateElement({
-      point:{
-        ...this._state.point,
-        newPointType:evt.target.value,
-        offers:[]
-      }
+      ...this._state,
+      offers: [],
+      type: evt.target.value,
+
     });
   };
 
-  #destinationChangeHandler = (evt) =>{//выбранное направление
-    const selectedDistination = this.#pointDestinations.find((elem) => elem.name === evt.target.value);
-    const selectedDistinationId = (selectedDistination) ? selectedDistination.id : null;
-
+  #destinationChangeHandler = (evt) => {
+    evt.preventDefault();
     this.updateElement({
-      point:{
-        ...this._state.point,
-        destination:selectedDistinationId
-      }
+      ...this._state,
+      destination: evt.target.value ? getDestinationByName(evt.target.value, this.#pointDestinations).id : false,
     });
   };
 
@@ -127,94 +126,101 @@ export default class CreateFormView extends AbstractStatefulView{
     }
 
     this.updateElement({
-      offers: selectedOffers,
+      ...this._state,
+      offers: selectedOffers
     });
   };
 
-  #priceChangeHandler = (evt) =>{
+  #priceChangeHandler = (evt) => {
+    evt.preventDefault();
+    evt.preventDefault();
     this._setState({
-      point:{
-        ...this._state.point,
-        basePrice:Number(evt.target.value)
-      }
+      ...this._state,
+      basePrice: evt.target.value,
     });
   };
 
-  #dateFromCloseHandler = ([userDate]) => {//начало
+  #dateFromCloseHandler = ([userDate]) => {
     this._setState({
-      point:{
-        ...this._state.point,
-        dateFrom:userDate
-      }});
-    this.#datepickerTo.set('minDate',this._state.point.dataFrom);
-  };
+      ...this._state,
 
-  #dateToCloseHandler = ([userDate]) =>{//конец
-    this._setState({
-      point:{
-        ...this._state.point,
-        dateTo:userDate
-      }
+      dateFrom: userDate
     });
-    this.#datepickerFrom.set('maxDate',this._state.point.dateTo);
+    this.#datepickerTo.set('minDate', this._state.dataFrom);
   };
 
-  #setDatepickers = () =>{
+  #dateToCloseHandler = ([userDate]) => {
+    this._setState({
+      ...this._state,
+      dateTo: userDate
+    });
+    this.#datepickerFrom.set('maxDate', this._state.dateTo);
+  };
+
+  #setDatepickers = () => {
     const dateFromElement = this.element.querySelector('#event-start-time-1');
     const dateToElement = this.element.querySelector('#event-end-time-1');
-    const commonConfig = {//заготовка
-      dateFormat: 'd/m/y H:i',//формат
-      enableTime:true,//можно выбирать время
-      locale:{
-        firstDayOfWeek:1,//первый день недели понедельник
+    const commonConfig = {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      locale: {
+        firstDayOfWeek: 1,
       },
-      'time_24hr':true// формат 24 часа
+      'time_24hr': true
     };
     this.#datepickerFrom = flatpickr(
-      dateFromElement,{//дата начала
+      dateFromElement,
+      {
         ...commonConfig,
-        defaultDate:this._state.point.dataFrom,
-        onClose:this.#dateFromCloseHandler,
-        maxDate:this._state.point.dateTo,
+        defaultDate: this._state.dataFrom,
+        onClose: this.#dateFromCloseHandler,
+        maxDate: this._state.dateTo,
       },
     );
     this.#datepickerTo = flatpickr(
-      dateToElement,{//дата конца
+      dateToElement,
+      {
         ...commonConfig,
-        defaultDate:this._state.point.dataTo,
-        onClose:this.#dateToCloseHandler,
-        maxDate:this._state.point.dataFrom,
+        defaultDate: this._state.dataTo,
+        onClose: this.#dateToCloseHandler,
+        maxDate: this._state.dataFrom,
       }
     );
   };
 
-  #formSubmitHandler = (evt) =>{
+  #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(CreateFormView.parseStateToPint(this._state));//вызов функции сохранения
+    this.#handleFormSubmit(CreateFormView.parseStateToPint(this._state));
   };
 
-  #formArrowUpHandler = (evt) =>{
-    evt.preventDefault();
-    this.#handleArrowUpClick();//вызов функции закрытия
+  #formCancelHandler = () => {
+    this.#handleCancelClick();
   };
 
-  #deleteClickHandler = (evt) =>{
+
+  #formArrowUpHandler = (evt) => {
     evt.preventDefault();
-    this.#handleDeleteClick(this._state.point);//удаление
+    this.#handleArrowUpClick();
   };
 
-  static parsePointToState(point){
-    return{
-      point,
+  #deleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleDeleteClick(CreateFormView.parseStateToPint(this._state));
+  };
+
+  static parsePointToState(point) {
+    return {
+      ...point,
       newPointType: false,
       newDestination: false,
-      isDisabled : false,
-      isSaving : false,
-      isDeletind : false,};
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    };
   }
 
   static parseStateToPint = (state) => {
-    const point = {...state};
+    const point = { ...state };
 
     if (point.newPointType !== false) {
       point.type = point.newPointType;

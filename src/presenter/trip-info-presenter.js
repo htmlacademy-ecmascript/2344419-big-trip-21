@@ -1,32 +1,32 @@
 import dayjs from 'dayjs';
 import InfoView from '../view/info-container-view';
-import {render, replace, remove, RenderPosition} from '../framework/render.js';
-import {getDestinationsById, getOffersByType, getCheckedOffers, sortPointsByDay} from '../utils/utils-trip-info.js';
-import {DESTINATION_ITEMS_LENGTH} from '../const.js';
+import { render, replace, remove, RenderPosition } from '../framework/render.js';
+import { getDestinationsById, getOffersByType, getCheckedOffers, sortPointsByDay } from '../utils/utils-trip-info.js';
+import { DESTINATION_ITEMS_LENGTH } from '../const.js';
 
 export default class TripInfoPresenter {
   #tripInfoContainer = null;
   #offersModel = null;
   #destinationsModel = null;
   #pointModel = null;
-  #mockService = null;
+  #serviceData = null;
   #tripInfoComponent = null;
   #sortedPoints = null;
 
-  constructor({tripInfoContainer, offersModel, destinationsModel, pointsModel, mockService}) {
+  constructor({ tripInfoContainer, offersModel, destinationsModel, pointModel, serviceData }) {
     this.#tripInfoContainer = tripInfoContainer;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
-    this.#pointModel = pointsModel;
-    this.#mockService = mockService;
+    this.#pointModel = pointModel;
+    this.#serviceData = serviceData;
 
-    this.#mockService.addObserver(this.#handleModelEvent);
+    this.#serviceData.addObserver(this.#handleModelEvent);
   }
 
   init() {
     const prevTripInfoComponent = this.#tripInfoComponent;
 
-    if (this.#pointModel.points && this.#pointModel.points.length !== 0) {
+    if (this.#pointModel.points && this.#pointModel.points.length) {
       this.#sortedPoints = this.#pointModel.points.sort(sortPointsByDay);
       this.#tripInfoComponent = new InfoView(this.#getTripTitle(), this.#getTripDuration(), this.#getTotalTripCost());
 
@@ -52,7 +52,8 @@ export default class TripInfoPresenter {
   }
 
   #getTripDuration() {
-    return `${(dayjs(this.#sortedPoints.at(0).dateFrom).format('DD MMM')).toString()}&nbsp;&mdash;&nbsp;${(dayjs(this.#sortedPoints.at(-1).dateTo).format('DD MMM')).toString()}`;//падают тесты EXTRA при формате "DD MMM - DD"
+    return `${(dayjs(this.#sortedPoints.at(0).dateFrom).format('DD MMM'))
+      .toString()}&nbsp;&mdash;&nbsp;${(dayjs(this.#sortedPoints.at(-1).dateTo).format('DD MMM')).toString()}`;
   }
 
   #getTotalTripCost() {

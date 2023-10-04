@@ -1,9 +1,10 @@
-import{formatSrtingToDateTime, CreateToUpperCase } from '../utils/utils.js';
+import { formatSrtingToDateTime, CreateToUpperCase } from '../utils/utils.js';
+import { getOffersByType, getDestinationsById } from '../utils/utils-trip-info.js';
 import he from 'he';
 
-function createEventTypesTemplate(offerTypes, type, isDisabled) {
-  if (offerTypes) {
-    return offerTypes.map((item) => `
+function createEventTypesTemplate(pointOffers, isDisabled) {
+  if (pointOffers) {
+    return pointOffers.map((item) => `
       <div class="event__type-item">
         <input id="event-type-${he.encode(item.type)}-1" class="event__type-input  visually-hidden"
         type="radio" name="event-type" value="${he.encode(item.type)}" ${isDisabled ? 'disabled' : ''}>
@@ -22,9 +23,9 @@ function createDestinationListTemplate(pointDestination, destinations, isDisable
     <datalist id="destination-list-1">
     `;
 
-  destinations.forEach((destination) => {
+  destinations.forEach((element) => {
     destinationListTemplate +=
-      `  <option value="${he.encode(destination.name)}"></option>
+      `  <option value="${he.encode(element.name)}"></option>
     `;
   });
 
@@ -49,7 +50,9 @@ function createEventOffersTemplate(pointOffers, pointCheckedOffers, isDisabled) 
 
   pointOffers.map((offer) => {
     eventOffersTemplate += `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${changeToLowercase(offer.title)}-1" type="checkbox" name="event-offer-${changeToLowercase(offer.title)}" data-offer-id="${offer.id}" ${pointCheckedOffers.length > 0 && pointCheckedOffers.includes(offer.id) ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}>
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${changeToLowercase(offer.title)}-1"
+        type="checkbox" name="event-offer-${changeToLowercase(offer.title)}"
+        data-offer-id="${offer.id}" ${pointCheckedOffers.length > 0 && pointCheckedOffers.includes(offer.id) ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}>
         <label class="event__offer-label" for="event-offer-${changeToLowercase(offer.title)}-1">
           <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;
@@ -66,12 +69,12 @@ function createEventOffersTemplate(pointOffers, pointCheckedOffers, isDisabled) 
   return eventOffersTemplate;
 }
 
-function createDestinationTemplate({description, pictures}) {
+function createDestinationTemplate({ description, pictures }) {
   let destinationTemplate = '';
 
   if (description && description !== '') {
     destinationTemplate +=
-        `<section class="event__section  event__section--destination">
+      `<section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${description ? description : ''}</p>
 
@@ -87,7 +90,7 @@ function createDestinationTemplate({description, pictures}) {
   }
 
   destinationTemplate +=
-        `</div>
+    `</div>
       </div>
     </section>`;
 
@@ -103,23 +106,25 @@ function createDeleteButtonTemplate(isEditForm, isDeleting, isSaving) {
   return `<button class="event__reset-btn" type="reset"${isSaving ? ' disabled' : ''}>Cancel</button>`;
 }
 
-function getDestinationsById(id, destinations) {
-  if (id) {
-    return destinations.find((destination) => destination.id === id);
-  }
-  return '';
-}
-function getOffersByType(type, offers) {
-  return offers.find((offer) => offer.type === type).offers;
-}
+function createFormTemplite(state, destinations, offers, isEditForm) {
+  const {
+    newPointType,
+    newDestination,
+    isDisabled,
+    isDeleting,
+    isSaving,
+    type,
+    dateFrom,
+    dateTo,
+    basePrice,
+    destination
+  } = state;
 
-function createFormTemplite(point, pointTypes, destinations, offers, isEditForm) {
-  const {type, dateFrom, dateTo, basePrice, destination, newPointType, newDestination, isDisabled, isDeleting, isSaving} = point;
+
   const pointDestination = getDestinationsById(newDestination ? newDestination : destination, destinations);
   let pointOffers = [];
-
-  if (offers.length !== 0) {
-    pointOffers = getOffersByType(newPointType ? newPointType : point.type, offers);
+  if (offers) {
+    pointOffers = getOffersByType(newPointType ? newPointType : type, offers);
   }
   return (
     `<li class="trip-events__item">
@@ -139,14 +144,14 @@ function createFormTemplite(point, pointTypes, destinations, offers, isEditForm)
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
 
-                ${createEventTypesTemplate(pointTypes, isDisabled)}
+                ${createEventTypesTemplate(offers, isDisabled)}
               </fieldset>
             </div>
           </div>
 
           <div class="event__field-group  event__field-group--destination">
             <label class="event__label  event__type-output" for="event-destination-1">
-              ${newPointType ? he.encode(newPointType) : he.encode(type)}
+              ${newPointType ? newPointType : CreateToUpperCase(type)}
             </label>
               ${createDestinationListTemplate(pointDestination, destinations, isDisabled)}
           </div>
@@ -179,10 +184,10 @@ function createFormTemplite(point, pointTypes, destinations, offers, isEditForm)
 
         </header>
         <section class="event__details">
-          ${pointOffers.length > 0 ? createEventOffersTemplate(pointOffers, point.offers, isDisabled) : ''}
+          ${pointOffers.length > 0 ? createEventOffersTemplate(pointOffers, state.offers, isDisabled) : ''}
           ${createDestinationTemplate(pointDestination ? pointDestination : '')}
         </section>
       </form>
     </li>`);
 }
-export {createFormTemplite};
+export { createFormTemplite };
