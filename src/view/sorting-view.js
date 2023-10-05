@@ -1,4 +1,3 @@
-//сортировка
 import { createSortingTemplite } from '../template/sorting-template.js';
 import AbstractView from '../framework/view/abstract-view.js';
 

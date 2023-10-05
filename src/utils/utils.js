@@ -11,7 +11,6 @@ const MIN_IN_HOUR = 60;
 const HOUR_IN_DAY = 24;
 const MSEC_IN_HOUR = MIN_IN_HOUR * SEC_IN_MIN * MSEC_IN_SEC;
 const MSEC_IN_DAY = HOUR_IN_DAY * MSEC_IN_HOUR;
-const getRandomId = (min, max) => Math.floor(min + Math.random() * (max + 1 - min));
 
 const DATE_FORMAT = {
   fullData: 'DD/MM/YY HH:mm',
@@ -50,28 +49,6 @@ const getPointDuration = (dateFrom, dateTo) => {
 
   return pointDuration;
 };
-const Duration = {
-  MIN: 59,
-  DAY: 7,
-  HOUR: 23
-};
-
-let date = dayjs().subtract(getRandomId(0, Duration.DAY), 'day').toDate();
-
-const getDate = ({ next }) => {
-  const minsGap = getRandomId(0, Duration.MIN);
-  const hoursGap = getRandomId(0, Duration.HOUR);
-  const daysGap = getRandomId(0, Duration.DAY);
-  if (next) {
-    date = dayjs(date)
-      .add(minsGap, 'minute')
-      .add(hoursGap, 'hour')
-      .subtract(daysGap, 'day')
-      .toDate();
-  }
-  return date;
-};
-
 
 function getOffersByType(type, offers) {
   return offers.find((offer) => offer.type === type).offers;
@@ -84,8 +61,6 @@ function getCheckedOffers(checkedOffersId, pointOffers) {
 export {
   getOffersByType,
   getCheckedOffers,
-  getRandomId,
-  getDate,
   FormatStringToShortDate,
   formatSrtingToDateTime,
   formatStringToTime,
