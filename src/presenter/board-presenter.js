@@ -152,10 +152,11 @@ export default class BoardPresenter {
     this.#uiBlocker.unblock();
   };
 
-  #handleModelEvent = (updateType, data) => {
+  #handleModelEvent = (updateType) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#pointPresenters.get(data.id).init(data);
+        this.#clearPoints();
+        this.#renderBoard();
         break;
       case UpdateType.MINOR:
         this.#clearPoints();

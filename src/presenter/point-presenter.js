@@ -35,7 +35,7 @@ export default class PointPresenter {
       pointDestination: this.#destinationsModel.destinations,
       pointOffers: this.#offersModel.offers,
       onEditClick: this.#handleEditClick,
-      onFavoriteClick: this.#handlefavoriteClick,
+      onFavoriteClick: this.#handleFavoriteClick,
     });
     this.#pointEditComponent = new CreateFormView({
       point: this.#point,
@@ -156,7 +156,7 @@ export default class PointPresenter {
   };
 
 
-  #handlefavoriteClick = () => {
+  #handleFavoriteClick = () => {
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,

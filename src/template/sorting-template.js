@@ -9,7 +9,7 @@ function getSortItem(type, isChecked) {
   type="radio" name="trip-sort"
   value="sort-${type}"
   data-sort-items="${type}"
-  ${(isChecked) ? 'checked' : ''}
+  ${(isChecked) ? 'checked' : type === SortType.DAY && 'checked'}
   ${type === SortType.EVENT || type === SortType.OFFER ? 'disabled' : ''}
    >
   <label class="trip-sort__btn"
