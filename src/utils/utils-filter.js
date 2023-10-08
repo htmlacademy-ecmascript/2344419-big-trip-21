@@ -1,8 +1,20 @@
 import { FilterType } from '../const.js';
 import dayjs from 'dayjs';
 
+function isPastDate(date) {
+  return date && dayjs(date).isBefore(dayjs(), 'D');
+}
+
+function isTodayDate(date) {
+  return date && dayjs(date).isSame(dayjs(), 'D');
+}
+
+function isFutureDate(date) {
+  return date && dayjs(date).isAfter(dayjs(), 'D');
+}
+
 function isPointPresent(dateFrom, dateTo) {
-  return dayjs(dateFrom).diff(dayjs()) <= 0 && dayjs(dateTo).diff(dayjs()) >= 0;
+  return (isPastDate(dateFrom) || isTodayDate(dateFrom)) && (isFutureDate(dateTo) || isTodayDate(dateTo));
 }
 
 const filter = {
